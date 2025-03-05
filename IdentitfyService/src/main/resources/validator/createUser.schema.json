@@ -1,0 +1,43 @@
+{
+  "$id": "https://example.com/createPayment.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Validate create user request",
+  "description": "Create New User",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "username": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 10,
+      "pattern": "^[a-zA-Z0-9]+$",
+      "description": "Username must be 6-10 characters and cannot contain special characters"
+    },
+    "password": {
+      "type": "string",
+      "description": "User password"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Must be a valid email format"
+    },
+    "fullName": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Full name must not exceed 20 characters"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "pattern": "^0[0-9]{9}$",
+      "description": "Phone number must be 10 digits starting with 0"
+    }
+  },
+  "required": [
+    "username",
+    "password",
+    "email",
+    "fullName",
+    "phoneNumber"
+  ]
+}
