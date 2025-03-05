@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /identity
+
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: identity-service
+  datasource:
+    url: ${env.SQL_URL}
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+    username: ${env.SQL_USER}
+    password: ${env.SQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  liquibase:
+    url: ${env.SQL_URL}
+    enabled: true
+    user: ${env.SQL_USER}
+    password: ${env.SQL_PASSWORD}
+    change-log: classpath:db/changelog/changelog-master.xml
+  kafka:
+    bootstrap-servers: localhost:9094
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: onboarded-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+          spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+
+
+jwt:
+    signerKey: ${env.SIGNER_KEY_VALUE}
+    valid-duration: 3600
+    refreshable-duration: 36000
