@@ -1,0 +1,29 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /profile
+
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: profile-service
+  datasource:
+    url: ${env.SQL_URL}
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+    username: ${env.SQL_USER}
+    password: ${env.SQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: profile-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
