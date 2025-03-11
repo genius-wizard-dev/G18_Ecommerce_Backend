@@ -21,6 +21,7 @@ public class AddressResponse {
     String city;
     String detail;
     String type;
+    String phoneShip;
     boolean isDefault;
     Date createdAt;
     Date updatedAt;
