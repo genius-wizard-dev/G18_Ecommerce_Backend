@@ -22,11 +22,48 @@ class DiscountController {
         }
     }
 
-    async getDiscountHandler(req: Request, res: Response, next: NextFunction) {
+    async applyDiscountHandler(
+        req: Request<{}, {}, { discountId: String; userIdList: String[] }>,
+        res: Response,
+        next: NextFunction
+    ) {
         try {
-            const dicountId: string = req.params.dicountId;
+            const { discountId, userIdList } = req.body;
+            console.log({ discountId, userIdList });
+            const discount = await DiscountService.addToUserUsedList(discountId, userIdList);
 
-            const discount = await DiscountService.getDiscount(dicountId);
+            res.status(201).json({
+                message: "Create discount successful",
+                data: discount,
+                code: Code.SUCCESS
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getDiscountsHandler(req: Request, res: Response, next: NextFunction) {
+        try {
+            const shopId = req.query.shopId as string;
+            const productId = req.query.productId as string;
+
+            const discounts = await DiscountService.getDiscounts(shopId, productId);
+
+            res.status(200).json({
+                message: "Get discount successful",
+                data: discounts,
+                code: Code.SUCCESS
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getDiscountByIdHandler(req: Request, res: Response, next: NextFunction) {
+        try {
+            const discountId: string = req.params.discountId;
+
+            const discount = await DiscountService.getDiscount(discountId);
 
             res.status(200).json({
                 message: "Get discount successful",
@@ -73,24 +110,6 @@ class DiscountController {
             res.status(200).json({
                 message: "Delete discount successful",
                 code: Code.SUCCESS
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async getDiscountsByShopHandler(req: Request, res: Response, next: NextFunction) {
-        try {
-            const shopId: string = req.params.shopId;
-
-            if (!shopId) throw createError.BadRequest("Invalid shop id");
-
-            const discountList = await DiscountService.getDiscountsByShop(shopId);
-
-            res.status(200).json({
-                code: Code.SUCCESS,
-                message: "Get discounts by shop successful",
-                data: discountList
             });
         } catch (error) {
             next(error);
