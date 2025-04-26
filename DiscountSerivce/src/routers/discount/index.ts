@@ -6,8 +6,9 @@ import { DiscountSchema, UpdateDiscountSchema } from "../../validation/discount.
 const router: Router = Router();
 
 router.post("/discounts", validateResource(DiscountSchema), discountController.createDiscountHandler);
-router.get("/discounts/:discountId", discountController.getDiscountHandler);
-router.get("/discounts/shops/:shopId", discountController.getDiscountsByShopHandler);
+router.post("/discounts/user-apply", discountController.applyDiscountHandler);
+router.get("/discounts", discountController.getDiscountsHandler);
+router.get("/discounts/:discountId", discountController.getDiscountByIdHandler);
 router.patch(
     "/discounts/:discountId",
     validateResource(UpdateDiscountSchema),

@@ -1,6 +1,7 @@
 import Discount, { DiscountDocument } from "../models/discount.model";
 import { DiscountInput, UpdatedDiscountInput } from "../validation/discount.schema";
 import createError from "http-errors";
+import mongoose from "mongoose";
 
 class DiscountService {
     static async createDiscount(discountData: DiscountInput["body"]): Promise<DiscountDocument> {
@@ -18,11 +19,41 @@ class DiscountService {
             throw error;
         }
     }
+    static async getDiscounts(shopId?: string, productId?: string): Promise<DiscountDocument[]> {
+        try {
+            const query = {
+                shop: shopId,
+                applied_product_list: productId
+            };
+
+            console.log(query);
+
+            if (!shopId) delete query.shop;
+            if (!productId) delete query.applied_product_list;
+
+            const discounts = await Discount.find(query);
+
+            return discounts;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     static async getDiscount(discountId: String): Promise<DiscountDocument | null> {
         try {
-            const discount: DiscountDocument | null = await Discount.findOne({ discountId });
+            const discount: DiscountDocument | null = await Discount.findById(discountId);
             return discount;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async addToUserUsedList(discountId: String, userIdList: String[]): Promise<boolean> {
+        try {
+            await Discount.findByIdAndUpdate(discountId, {
+                $push: { used_user_list: userIdList }
+            });
+            return true;
         } catch (error) {
             throw error;
         }
@@ -55,14 +86,6 @@ class DiscountService {
             throw error;
         }
     }
-
-    static async getDiscountsByShop(shopId: String): Promise<DiscountDocument[]> {
-        const discountList = await Discount.find({ shop: shopId });
-
-        return discountList;
-    }
-
-    static async getProductsByDiscount() {}
 }
 
 export default DiscountService;
