@@ -2,13 +2,12 @@ import dotenv from "dotenv";
 import { Env } from "../shared";
 dotenv.config();
 
+console.log(process.env.DEV_MONGODB_URI);
 const DEV = {
     PORT: process.env.DEV_APP_PORT as string,
     ENV: Env.DEV as string,
     MONGODB: {
-        URI: process.env.DEV_MONGODB_URI as string,
-        USERNAME: process.env.DEV_MONGODB_USERNAME as string,
-        PASSWORD: process.env.DEV_MONGODB_PASSWORD as string
+        URI: process.env.DEV_MONGODB_URI as string
     }
 };
 
@@ -16,9 +15,7 @@ const PRO = {
     PORT: process.env.PRO_APP_PORT as string,
     ENV: Env.PRO as string,
     MONGODB: {
-        URI: process.env.PRO_MONGODB_URI as string,
-        USERNAME: process.env.PRO_MONGODB_USERNAME as string,
-        PASSWORD: process.env.PRO_MONGODB_PASSWORD as string
+        URI: process.env.PRO_MONGODB_URI as string
     }
 };
 
