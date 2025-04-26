@@ -17,10 +17,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-  private final String[] PUBLIC_ENDPOINTS = {
-      "/users/sign-up", "/auth/log-in", "/auth/introspect", "/auth/logout", "/auth/refresh"
-  };
-  private final CustomJwtDecoder customJwtDecoder;
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/users/sign-up","/auth/log-in","/auth/introspect", "/auth/logout", "/auth/refresh"
+    };
+    private final CustomJwtDecoder customJwtDecoder;
 
   public SecurityConfig(CustomJwtDecoder customJwtDecoder) {
     this.customJwtDecoder = customJwtDecoder;

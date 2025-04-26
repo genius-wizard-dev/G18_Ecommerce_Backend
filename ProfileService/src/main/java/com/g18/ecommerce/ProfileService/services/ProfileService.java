@@ -10,5 +10,6 @@ public interface ProfileService {
     public ProfileResponse updateProfile(String id,UpdateProfileRequest request);
     public void inactiveProfile(String userId);
     public ProfileResponse registerShop(String profileId);
+    public ProfileResponse getProfileByUserId(String userId );
 
 }
