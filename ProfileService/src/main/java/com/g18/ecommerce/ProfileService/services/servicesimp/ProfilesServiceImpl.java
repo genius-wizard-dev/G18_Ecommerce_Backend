@@ -78,4 +78,11 @@ public class ProfilesServiceImpl implements ProfileService {
         var response = profileRepository.save(foundProfile);
         return profileMapper.toProfileResponse(response);
     }
+
+    @Override
+    public ProfileResponse getProfileByUserId(String userId) {
+        var foundProfile = profileRepository.findByUserId(userId).
+                orElseThrow(()-> new AppException(ErrorCode.PROFILE_NOT_FOUND));
+        return profileMapper.toProfileResponse(foundProfile);
+    }
 }
