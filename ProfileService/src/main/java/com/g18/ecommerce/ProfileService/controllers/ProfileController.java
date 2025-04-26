@@ -21,6 +21,13 @@ public class ProfileController {
                 .build();
     }
 
+    @GetMapping("my-profile/{userId}")
+    public ApiResponse<ProfileResponse> getProfile(@PathVariable String userId) {
+        return ApiResponse.<ProfileResponse>builder()
+                .result(profileService.getProfileByUserId(userId))
+                .build();
+    }
+
     @PutMapping("/register-shop/{profileId}")
     public ApiResponse<ProfileResponse> registerShop(@PathVariable String profileId) {
         return ApiResponse.<ProfileResponse>builder()
