@@ -16,4 +16,5 @@ public class AddressCreationRequest {
     String city;
     String detail;
     String type;
+    String phoneShip;
 }

@@ -30,7 +30,7 @@ public class Address {
      AddressType type;
 
      boolean isDefault;
-
+     String phoneShip;
      Date createdAt;
      Date updatedAt;
 

@@ -40,7 +40,7 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
     @Bean
-    public UrlBasedCorsConfigurationSource urlBasecorsConfigurationSource() {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOriginPattern("*"); // Frontend domain
         corsConfiguration.setAllowCredentials(true); // Cho phép cookie hoặc thông tin xác thực
