@@ -13,5 +13,5 @@ public class OrderLineItemRequest {
     String productId;
     int quantity;
     double price;
-    boolean isAppliedDiscount;
+    boolean appliedDiscount;
 }
