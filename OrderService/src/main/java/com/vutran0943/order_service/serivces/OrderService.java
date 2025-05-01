@@ -53,7 +53,8 @@ public class OrderService {
         int occurrences = 0;
         int quantityPerUser = 0;
         double discountValue = 0;
-        String discountType = "fixed";
+        String discountType = "";
+        String appliedProductType = "";
         List<String> appliedProductList = new ArrayList<>();
         List<OrderLineItem> newOrderLineItemList = new ArrayList<>();
         List<OrderLineItemRequest> orderLineItemRequestList = request.getOrderLineItemList();
@@ -65,6 +66,7 @@ public class OrderService {
             discountValue = discount.getDiscount_value();
             discountType = discount.getDiscount_type();
             quantityPerUser = discount.getQuantity_per_user();
+            appliedProductType = discount.getApplied_product_type();
         }
 
         int appliedDiscountNum = 0;
@@ -74,8 +76,6 @@ public class OrderService {
             if(orderLineItemRequest.isAppliedDiscount()) appliedDiscountNum += 1;
         }
 
-        System.out.println(appliedDiscountNum);
-        System.out.println(occurrences + appliedDiscountNum);
         if(occurrences + appliedDiscountNum > quantityPerUser) throw new AppException(ErrorCode.DISCOUNT_NOT_ENOUGH);
 
         for(OrderLineItemRequest orderLineItemRequest : orderLineItemRequestList) {
@@ -83,7 +83,7 @@ public class OrderService {
             OrderLineItem orderLineItem = mapToOrderLineItem(orderLineItemRequest);
             orderLineItem.setOrder(order);
 
-            if(discount != null && appliedProductList.contains(orderLineItem.getProductId()) && orderLineItem.isAppliedDiscount()) {
+            if(discount != null && (appliedProductType.equals("all") || appliedProductList.contains(orderLineItem.getProductId())) && orderLineItem.isAppliedDiscount()) {
                 userIdList.add(userId);
                 double finalPrice = discountType.equals("fixed") ? orderLineItem.getPrice() - discountValue : orderLineItem.getPrice() * (1-discountValue);
                 if(finalPrice < 0) finalPrice = 0;
@@ -155,7 +155,7 @@ public class OrderService {
                 .price(orderLineItemRequest.getPrice())
                 .quantity(orderLineItemRequest.getQuantity())
                 .productId(orderLineItemRequest.getProductId())
-                .isAppliedDiscount(orderLineItemRequest.isAppliedDiscount())
+                .appliedDiscount(orderLineItemRequest.isAppliedDiscount())
                 .build();
     }
 

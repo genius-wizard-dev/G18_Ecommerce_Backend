@@ -30,5 +30,5 @@ public class OrderLineItem {
     String discountId;
     Double finalPrice;
     @Column(nullable = false)
-    boolean isAppliedDiscount;
+    boolean appliedDiscount;
 }
