@@ -145,14 +145,21 @@
           </compilerArgs>
         </configuration>
       </plugin>
-      <!--			<plugin>-->
-      <!--				<groupId>org.liquibase</groupId>-->
-      <!--				<artifactId>liquibase-maven-plugin</artifactId>-->
-      <!--				<configuration>-->
-      <!--					<propertyFile>src/main/resources/application.yml</propertyFile>-->
-      <!--					<propertyFileWillOverride>true</propertyFileWillOverride>-->
-      <!--				</configuration>-->
-      <!--			</plugin>-->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.4.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>com.g18.ecommerce.ProfileService.ProfileServiceApplication</mainClass>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
