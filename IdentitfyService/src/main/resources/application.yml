@@ -25,7 +25,14 @@ spring:
     password: ${env.SQL_PASSWORD}
     change-log: classpath:db/changelog/changelog-master.xml
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
     producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -37,7 +44,6 @@ spring:
       properties:
           spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
           spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-
 
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}

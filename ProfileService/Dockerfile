@@ -14,7 +14,7 @@ FROM amazoncorretto:21.0.4
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8088
 
 # Chờ Kafka khởi động trước khi chạy ứng dụng
 ENTRYPOINT ["sh", "-c", "sleep 10 && java -jar app.jar"]

@@ -19,7 +19,14 @@ spring:
       ddl-auto: update
     show-sql: true
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
     consumer:
       group-id: profile-group
       auto-offset-reset: earliest
