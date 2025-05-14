@@ -25,25 +25,26 @@ spring:
     password: ${env.SQL_PASSWORD}
     change-log: classpath:db/changelog/changelog-master.xml
   kafka:
-      bootstrap-servers: d09jle9qploprptlaneg.any.ap-south-1.mpx.prd.cloud.redpanda.com:9092
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: onboarded-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
-        security.protocol: SASL_SSL
-        sasl.mechanism: SCRAM-SHA-512
-        sasl.jaas.config: >
-          org.apache.kafka.common.security.scram.ScramLoginModule required
-          username="g18ecommerce"
-          password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
-      producer:
-          key-serializer: org.apache.kafka.common.serialization.StringSerializer
-          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      consumer:
-        group-id: onboarded-group
-        auto-offset-reset: earliest
-        key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-        properties:
-            spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-            spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+
 
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}
