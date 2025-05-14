@@ -19,18 +19,18 @@ spring:
       ddl-auto: update
     show-sql: true
   kafka:
-      bootstrap-servers: d09jle9qploprptlaneg.any.ap-south-1.mpx.prd.cloud.redpanda.com:9092
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="I2g71o0eI1RulwK4Z3zC7LEaKqL5WY";
+    consumer:
+      group-id: profile-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        security.protocol: SASL_SSL
-        sasl.mechanism: SCRAM-SHA-512
-        sasl.jaas.config: >
-          org.apache.kafka.common.security.scram.ScramLoginModule required
-          username="g18ecommerce"
-          password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
-      consumer:
-            group-id: profile-group
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-            properties:
-              spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: "*"
