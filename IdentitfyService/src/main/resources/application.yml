@@ -32,7 +32,7 @@ spring:
       sasl.jaas.config: >
         org.apache.kafka.common.security.scram.ScramLoginModule required
         username="g18ecommerce"
-        password="I2g71o0eI1RulwK4Z3zC7LEaKqL5WY";
+        password="Hum3XtGsrjBdhXTDUZnmgZbqbrIBdO";
     producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
