@@ -10,6 +10,7 @@ const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 const productRoutes = require("./routes/productsRoutes");
+const { connectProducer } = require("./kafka/producer");
 const PORT = process.env.PORT || 3500;
 
 // connect to mongoDB
@@ -47,5 +48,6 @@ app.all("*", (req, res) => {
 
 mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB");
+    connectProducer().then(() => console.log("Kafka Producer connected"));
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });

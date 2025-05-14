@@ -1,11 +1,11 @@
-@url=http://localhost:4000
+@url=http://localhost:5002
 
 ### Create discount
 POST {{url}}/api/discounts
 Content-Type: application/json
 
 {
-    "shop": "67cc13920bb30824e70344fa",
+    "shop": "68029c036e0512f0bca5be76",
     "name": "Voucher 09/09",
     "code": "WZC003",
     "start_time": "2025-03-10T00:00:00Z",
@@ -20,7 +20,10 @@ Content-Type: application/json
     "is_active": true
 }
 
-### Get discount
+### Get discount by product id or shop id
+GET {{url}}/api/discounts?shopId=68029c036e0512f0bca5be76
+
+### Get discount by id
 GET {{url}}/api/discounts/67cc13920bb30824e70344fa
 
 ### Update discount

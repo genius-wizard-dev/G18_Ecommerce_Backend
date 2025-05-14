@@ -45,6 +45,7 @@ spring:
           spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
           spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
 
+
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}
     valid-duration: 3600

@@ -20,17 +20,17 @@ spring:
     show-sql: true
   kafka:
     bootstrap-servers: ${env.URL_BOOTSTRAP}
-    properties:
-      security.protocol: SASL_SSL
-      sasl.mechanism: SCRAM-SHA-512
-      sasl.jaas.config: >
-        org.apache.kafka.common.security.scram.ScramLoginModule required
-        username="g18ecommerce"
-        password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
-    consumer:
-      group-id: profile-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "*"
+        security.protocol: SASL_SSL
+        sasl.mechanism: SCRAM-SHA-512
+        sasl.jaas.config: >
+          org.apache.kafka.common.security.scram.ScramLoginModule required
+          username="g18ecommerce"
+          password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
+      consumer:
+            group-id: profile-group
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            properties:
+              spring.json.trusted.packages: "*"

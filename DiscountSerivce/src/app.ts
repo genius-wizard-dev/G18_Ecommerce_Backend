@@ -9,7 +9,6 @@ import { Code } from "./shared/code";
 
 const app: Express = express();
 const { ENV } = defaultConfig;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());

@@ -19,7 +19,6 @@ class Database {
 
     public onConnect(dbType: string) {
         this.dbType = dbType;
-
         switch (dbType) {
             case DBType.MONGODB: {
                 this.connection = mongoose.createConnection(URI);
