@@ -4,11 +4,14 @@ spring:
   application:
     name: basket-service
   datasource:
-    username: root
-    password: 123456a
-    url: jdbc:mysql://localhost:3306/cart-service
+    username: ${env.MYSQL_USERNAME}
+    password: ${env.MYSQL_PASSWORD}
+    url: ${env.MYSQL_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+other:
+  discount-service-url: ${env.DISCOUNT_SERVICE_URL}
+  order-service-url: ${env.ORDER_SERVICE_URL}

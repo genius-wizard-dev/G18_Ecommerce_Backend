@@ -90,20 +90,42 @@ const inventoryController = {
         }
     },
 
-    checkInventory: async (req, res) => {
+    checkInventory: async (data) => {
         try {
-            const params = req.query;
-            const productIds = Object.keys(params);
+            const params = {};
+            const productIds = data.map((item) => {
+                params[item.productId] = item.quantity;
+                return item.productId;
+            });
+
             const inventories = await Inventory.find({ product_id: { $in: productIds } });
+
             const result = inventories.map((item) => ({
                 id: item.product_id,
-                isInStock: item.total_quantity > parseInt(params[item.product_id])
+                name: item.product_name,
+                reservedQuantity: params[item.product_id],
+                isInStock: item.total_quantity - item.reserved_quantity >= parseInt(params[item.product_id])
             }));
-            console.log(result);
-            res.json({ message: "Check stock successful", data: result, code: 1000 });
+
+            return result;
         } catch (err) {
-            console.log(err);
-            res.status(500).json(ApiResponse.error("Internal Server Error"));
+            throw err;
+        }
+    },
+
+    getInventoriesByShop: async (req, res, next) => {
+        try {
+            const shopId = req.params.id;
+
+            const inventories = await Inventory.find({ shop_id: shopId });
+
+            res.json({
+                message: "Get inventories successful",
+                code: 1000,
+                data: inventories
+            });
+        } catch (error) {
+            throw error;
         }
     },
     subtractInventory: async (req, res) => {

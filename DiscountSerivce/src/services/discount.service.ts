@@ -1,7 +1,6 @@
 import Discount, { DiscountDocument } from "../models/discount.model";
 import { DiscountInput, UpdatedDiscountInput } from "../validation/discount.schema";
 import createError from "http-errors";
-import mongoose from "mongoose";
 
 class DiscountService {
     static async createDiscount(discountData: DiscountInput["body"]): Promise<DiscountDocument> {

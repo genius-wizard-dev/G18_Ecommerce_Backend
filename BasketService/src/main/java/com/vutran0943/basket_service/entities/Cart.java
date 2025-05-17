@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,17 +22,18 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String discountId;
     @Column(name = "user_id", nullable = false)
     private String userId;
     private String status;
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private Timestamp createdAt;
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     List<CartItem> cartItems;
+    @Column(nullable = false)
+    private double totalPrice;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

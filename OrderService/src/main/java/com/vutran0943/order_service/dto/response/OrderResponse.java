@@ -6,11 +6,10 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderResponse {
