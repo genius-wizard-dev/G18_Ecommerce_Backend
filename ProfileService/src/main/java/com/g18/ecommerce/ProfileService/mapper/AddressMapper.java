@@ -1,6 +1,7 @@
 package com.g18.ecommerce.ProfileService.mapper;
 
 import com.g18.ecommerce.ProfileService.dto.request.AddressCreationRequest;
+import com.g18.ecommerce.ProfileService.dto.request.UpdateAddressRequest;
 import com.g18.ecommerce.ProfileService.dto.response.AddressResponse;
 import com.g18.ecommerce.ProfileService.entity.Address;
 import com.g18.ecommerce.ProfileService.entity.AddressType;
@@ -11,7 +12,7 @@ import org.mapstruct.Mapping;
 public interface AddressMapper {
     @Mapping(target="type", expression = "java(convertToAddressType(req.getType()))")
     Address toAddress(AddressCreationRequest req);
-
+    Address updateRequestToAddress(UpdateAddressRequest req);
     @Mapping(target="type", expression = "java(convertToAddressType(address.getType()))")
     @Mapping(target = "profileId", ignore = true)
     @Mapping(target="isDefault", ignore = true)
