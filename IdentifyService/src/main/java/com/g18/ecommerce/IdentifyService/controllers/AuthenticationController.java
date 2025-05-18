@@ -5,16 +5,12 @@ import com.g18.ecommerce.IdentifyService.dto.response.AuthenticationResponse;
 import com.g18.ecommerce.IdentifyService.dto.response.IntrospectResponse;
 import com.g18.ecommerce.IdentifyService.services.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.text.ParseException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -48,6 +44,22 @@ public class AuthenticationController {
         authenticationService.logout(req);
         return ApiResponse.<Void>builder()
                 .build();
+    }
+
+    @PostMapping("/send-otp-change-password/{userId}")
+    public ApiResponse<?> sendOtp(@PathVariable String userId, @RequestBody OtpRequest request) throws MessagingException {
+        return ApiResponse.builder()
+                .result(authenticationService.sendOtp(userId, request))
+                .build();
+    }
+
+    @PostMapping("/change-password/{userId}")
+    public ApiResponse<Boolean> changePassword(@PathVariable String userId, @RequestBody ChangePasswordRequest request) {
+        boolean result = authenticationService.changePassword(userId, request);
+            return ApiResponse.<Boolean>builder()
+                    .result(result)
+                    .build();
+
     }
 
 }
