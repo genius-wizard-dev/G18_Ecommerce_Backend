@@ -5,6 +5,11 @@ server:
 
 
 spring:
+  data:
+    redis:
+      host: ${env.REDIS_HOST}
+      password: ${env.REDIS_PASSWORD}
+      port: 14219
   main:
     banner-mode: off
   application:
@@ -44,8 +49,14 @@ spring:
       properties:
           spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
           spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${env.MAIL_USERNAME}
+    password: ${env.MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}
     valid-duration: 3600
