@@ -49,10 +49,9 @@ public class AddressServiceImpl implements AddressService {
             response.setDefault(address.isDefault());
             return response;
         }
-        for(var address : addresses) {
-            if(Objects.equals(req.getStreet(), address.getStreet()) ||
-                    Objects.equals(req.getWard(), address.getWard()) ||
-                    Objects.equals(req.getDistrict(), address.getDistrict()) ||
+        for (var address : addresses) {
+            if (Objects.equals(req.getWard(), address.getWard()) &&
+                    Objects.equals(req.getDistrict(), address.getDistrict()) &&
                     Objects.equals(req.getCity(), address.getCity())) {
                 throw new AppException(ErrorCode.ADDRESS_ALREADY_EXISTS);
             }
