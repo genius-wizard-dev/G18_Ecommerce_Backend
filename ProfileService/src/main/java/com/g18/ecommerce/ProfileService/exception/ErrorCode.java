@@ -19,6 +19,7 @@ public enum ErrorCode {
     INVALID_DISPLAY_NAME(1014, "Display name must be at least {min} characters", HttpStatus.BAD_REQUEST),
     INVALID_AVATAR_URL(1015, "Avatar is not a valid URL", HttpStatus.BAD_REQUEST),
     ADDRESS_NOT_FOUND(1016, "Address not found", HttpStatus.NOT_FOUND),
+    ADDRESS_ALREADY_EXISTS(1017, "Address already exists", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
