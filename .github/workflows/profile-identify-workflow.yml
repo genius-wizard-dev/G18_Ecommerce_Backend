@@ -10,6 +10,7 @@ on:
 
 jobs:
   deploy-profile-service:
+    if: contains(join(github.event.commits.*.modified, ','), 'ProfileService/') || contains(join(github.event.commits.*.added, ','), 'ProfileService/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,6 +27,7 @@ jobs:
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL_PROFILE }}
 
   deploy-identify-service:
+    if: contains(join(github.event.commits.*.modified, ','), 'IdentifyService/') || contains(join(github.event.commits.*.added, ','), 'IdentifyService/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
