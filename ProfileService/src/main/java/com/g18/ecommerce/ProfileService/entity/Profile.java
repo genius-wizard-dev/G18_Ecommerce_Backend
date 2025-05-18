@@ -28,7 +28,7 @@ public class Profile {
     String email;
     String phoneNumber;
     String fullName;
-    String displayName;
+    String shopName;
     boolean isActivated;
     Date createdAt;
     Date updatedAt;
