@@ -1,6 +1,7 @@
 package com.g18.ecommerce.ProfileService.controllers;
 
 import com.g18.ecommerce.ProfileService.dto.request.ApiResponse;
+import com.g18.ecommerce.ProfileService.dto.request.RegisterShopRequest;
 import com.g18.ecommerce.ProfileService.dto.request.UpdateProfileRequest;
 import com.g18.ecommerce.ProfileService.dto.response.ProfileResponse;
 import com.g18.ecommerce.ProfileService.services.ProfileService;
@@ -28,9 +29,9 @@ public class ProfileController {
                 .build();
     }
     @PutMapping("/register-shop/{profileId}")
-    public ApiResponse<ProfileResponse> registerShop(@PathVariable String profileId) {
+    public ApiResponse<ProfileResponse> registerShop(@PathVariable String profileId, @RequestBody @Valid RegisterShopRequest req) {
         return ApiResponse.<ProfileResponse>builder()
-                .result(profileService.registerShop(profileId))
+                .result(profileService.registerShop(profileId, req))
                 .build();
     }
 
