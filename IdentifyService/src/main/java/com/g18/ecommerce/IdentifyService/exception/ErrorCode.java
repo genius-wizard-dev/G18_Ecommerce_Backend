@@ -22,6 +22,8 @@ public enum ErrorCode {
     CREATE_PROFILE_ERROR(1013, "Create profile error", HttpStatus.INTERNAL_SERVER_ERROR),
     CREATE_USER_ERROR(1014, "Create user error", HttpStatus.BAD_REQUEST),
     VALIDATE_ERROR(1015, "Validate error", HttpStatus.BAD_REQUEST),
+    INVALID_OTP(1016, "OTP change password does not match", HttpStatus.BAD_REQUEST),
+    TOKEN_USED(1017, "Token used", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
