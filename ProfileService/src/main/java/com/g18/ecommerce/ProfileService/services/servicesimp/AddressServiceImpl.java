@@ -1,6 +1,7 @@
 package com.g18.ecommerce.ProfileService.services.servicesimp;
 
 import com.g18.ecommerce.ProfileService.dto.request.AddressCreationRequest;
+import com.g18.ecommerce.ProfileService.dto.request.UpdateAddressRequest;
 import com.g18.ecommerce.ProfileService.dto.response.AddressResponse;
 import com.g18.ecommerce.ProfileService.entity.Address;
 import com.g18.ecommerce.ProfileService.entity.AddressType;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,14 @@ public class AddressServiceImpl implements AddressService {
             response.setProfileId(profileId);
             response.setDefault(address.isDefault());
             return response;
+        }
+        for(var address : addresses) {
+            if(Objects.equals(req.getStreet(), address.getStreet()) ||
+                    Objects.equals(req.getWard(), address.getWard()) ||
+                    Objects.equals(req.getDistrict(), address.getDistrict()) ||
+                    Objects.equals(req.getCity(), address.getCity())) {
+                throw new AppException(ErrorCode.ADDRESS_ALREADY_EXISTS);
+            }
         }
         return addMoreAddress(profileId, req);
     }
@@ -74,19 +84,21 @@ public class AddressServiceImpl implements AddressService {
         response.setDefault(address.isDefault());
         return response;
     }
+
     private List<Address> getAllAddress(String profileId) {
         return addressRepository.getAllByProfileId(profileId);
     }
+
     @Override
     public boolean setDefaultAddress(String profileId, String addressId) {
         var listAddress = getAllAddress(profileId);
-        listAddress.forEach(address ->{
-            if(address.isDefault()){
+        listAddress.forEach(address -> {
+            if (address.isDefault()) {
                 address.setDefault(false);
                 addressRepository.save(address);
             }
         });
-        var address = addressRepository.findById(addressId).orElseThrow(()-> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
+        var address = addressRepository.findById(addressId).orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         address.setDefault(true);
         address = addressRepository.save(address);
         return address.isDefault();
@@ -94,10 +106,32 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponse updateAddressType(String addressId, String type) {
-        var address = addressRepository.findById(addressId).orElseThrow(()-> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
+        var address = addressRepository.findById(addressId).orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         address.setType(AddressType.valueOf(type));
         address.setUpdatedAt(new Date(Instant.now().toEpochMilli()));
         address = addressRepository.save(address);
         return addressMapper.toAddressResponse(address);
+    }
+
+    @Override
+    public boolean deleteAddress(String addressId) {
+        addressRepository.deleteById(addressId);
+        return true;
+    }
+
+    @Override
+    public AddressResponse updateAddress(String addressId, UpdateAddressRequest req) {
+
+        var foundAddress = addressRepository.findById(addressId)
+                .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
+        foundAddress.setStreet(req.getStreet());
+        foundAddress.setWard(req.getWard());
+        foundAddress.setDistrict(req.getDistrict());
+        foundAddress.setCity(req.getCity());
+        foundAddress.setDetail(req.getDetail());
+        foundAddress.setPhoneShip(req.getPhoneShip());
+        foundAddress.setUpdatedAt(new Date(Instant.now().toEpochMilli()));
+        var response = addressRepository.save(foundAddress);
+        return addressMapper.toAddressResponse(response);
     }
 }

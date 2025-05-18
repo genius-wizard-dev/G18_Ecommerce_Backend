@@ -2,6 +2,7 @@ package com.g18.ecommerce.ProfileService.controllers;
 
 import com.g18.ecommerce.ProfileService.dto.request.AddressCreationRequest;
 import com.g18.ecommerce.ProfileService.dto.request.ApiResponse;
+import com.g18.ecommerce.ProfileService.dto.request.UpdateAddressRequest;
 import com.g18.ecommerce.ProfileService.dto.response.AddressResponse;
 import com.g18.ecommerce.ProfileService.services.AddressService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,20 @@ public class AddressController {
                                                           @RequestParam(name = "type") String addressType) {
         return ApiResponse.<AddressResponse>builder()
                 .result(addressService.updateAddressType(addressId, addressType))
+                .build();
+    }
+    @DeleteMapping("/delete/{addressId}")
+    public ApiResponse<Boolean> deleteAddress(@PathVariable String addressId) {
+        return ApiResponse.<Boolean>builder()
+                .result(addressService.deleteAddress(addressId))
+                .build();
+    }
+
+    @PutMapping("/update/{addressId}")
+    public ApiResponse<AddressResponse> updateAddress(@PathVariable String addressId,
+                                                      @RequestBody UpdateAddressRequest req) {
+        return ApiResponse.<AddressResponse>builder()
+                .result(addressService.updateAddress(addressId, req))
                 .build();
     }
 
