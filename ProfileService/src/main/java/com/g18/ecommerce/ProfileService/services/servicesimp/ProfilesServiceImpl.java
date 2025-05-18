@@ -132,4 +132,12 @@ public class ProfilesServiceImpl implements ProfileService {
         .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
     return profileMapper.toProfileResponse(foundProfile);
   }
+
+  @Override
+  public boolean checkIsShop(String userId) {
+    var foundProfile = profileRepository.findByUserId(userId)
+            .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
+    return foundProfile.getShopId() != null;
+  }
+
 }

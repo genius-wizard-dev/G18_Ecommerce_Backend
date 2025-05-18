@@ -14,13 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class ProfileController {
     ProfileService profileService;
+    @GetMapping("/{id}")
+    public ApiResponse<ProfileResponse> getProfile(@PathVariable String id){
+        return ApiResponse.<ProfileResponse>builder()
+                .result(profileService.getProfileByUserId(id))
+                .build();
+    }
+
     @PutMapping("/{id}")
     public ApiResponse<ProfileResponse> updateProfile(@RequestBody @Valid UpdateProfileRequest req, @PathVariable String id ) {
         return ApiResponse.<ProfileResponse>builder()
                 .result(profileService.updateProfile(id,req))
                 .build();
     }
-
     @PutMapping("/register-shop/{profileId}")
     public ApiResponse<ProfileResponse> registerShop(@PathVariable String profileId) {
         return ApiResponse.<ProfileResponse>builder()
@@ -28,4 +34,10 @@ public class ProfileController {
                 .build();
     }
 
+    @GetMapping("/check-shop/{userId}")
+    public ApiResponse<Boolean> checkIsShop(@PathVariable String userId) {
+        return ApiResponse.<Boolean>builder()
+                .result(profileService.checkIsShop(userId))
+                .build();
+    }
 }

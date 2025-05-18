@@ -11,5 +11,5 @@ public interface ProfileService {
     public void inactiveProfile(String userId);
     public ProfileResponse registerShop(String profileId);
     public ProfileResponse getProfileByUserId(String userId );
-
+    public boolean checkIsShop(String userId);
 }
