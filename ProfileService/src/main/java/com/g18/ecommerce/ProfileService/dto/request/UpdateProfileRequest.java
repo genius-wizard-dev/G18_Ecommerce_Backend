@@ -26,6 +26,8 @@ public class UpdateProfileRequest {
     )
     String avatar;
 
+    String email;
+    String phoneNumber;
     @Size(max = 10, message = "INVALID_DISPLAY_NAME")
     String displayName;
 

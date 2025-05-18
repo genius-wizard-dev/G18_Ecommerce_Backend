@@ -101,6 +101,8 @@ public class ProfilesServiceImpl implements ProfileService {
     var foundProfile = profileRepository.findByUserId(id)
         .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
     foundProfile.setAvatar(request.getAvatar());
+    foundProfile.setEmail(request.getEmail());
+    foundProfile.setPhoneNumber(request.getPhoneNumber());
     foundProfile.setDisplayName(request.getDisplayName());
     foundProfile.setBirthDay(request.getBirthDay());
     foundProfile.setUpdatedAt(new Date(Instant.now().toEpochMilli()));
