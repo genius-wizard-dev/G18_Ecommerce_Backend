@@ -24,6 +24,7 @@ public enum ErrorCode {
     VALIDATE_ERROR(1015, "Validate error", HttpStatus.BAD_REQUEST),
     INVALID_OTP(1016, "OTP change password does not match", HttpStatus.BAD_REQUEST),
     TOKEN_USED(1017, "Token used", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_MATCH(1018, "Password does not match", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

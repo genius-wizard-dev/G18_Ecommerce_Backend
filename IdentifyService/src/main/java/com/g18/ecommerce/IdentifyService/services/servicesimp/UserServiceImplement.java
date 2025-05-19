@@ -16,6 +16,7 @@ import com.g18.ecommerce.IdentifyService.repositories.UserRepository;
 import com.g18.ecommerce.IdentifyService.services.UserService;
 import com.g18.ecommerce.IdentifyService.utils.Constant;
 import com.google.gson.Gson;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -54,6 +55,7 @@ public class UserServiceImplement implements UserService {
     ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -91,6 +93,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -112,6 +115,7 @@ public class UserServiceImplement implements UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public UserResponse deleteUser(String userId) {
         log.info("Delete user with id: {}", userId);
         var foundUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -122,8 +126,13 @@ public class UserServiceImplement implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
+    }
+
+    public String fallbackMethod(Exception ex) {
+        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
     }
 }

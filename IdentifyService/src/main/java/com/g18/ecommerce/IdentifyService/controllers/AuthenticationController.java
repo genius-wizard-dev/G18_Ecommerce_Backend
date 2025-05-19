@@ -7,7 +7,6 @@ import com.g18.ecommerce.IdentifyService.services.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
