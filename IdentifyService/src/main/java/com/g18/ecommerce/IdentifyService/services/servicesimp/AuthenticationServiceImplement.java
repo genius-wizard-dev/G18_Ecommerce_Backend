@@ -16,6 +16,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -61,6 +62,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     EmailService emailService;
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public AuthenticationResponse authenticate(AuthenticationRequest req) {
         var user = userRepository.findByUsername(req.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -76,6 +78,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public IntrospectResponse introspect(IntrospectRequest req) {
         var token = req.getToken();
         boolean isValid = true;
@@ -88,6 +91,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public void logout(LogoutRequest req) {
         try {
             var signToken = verifyToken(req.getToken(), true);
@@ -104,6 +108,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public AuthenticationResponse refreshToken(RefreshRequest req) {
         try {
             var signedJWT = verifyToken(req.getToken(), true);
@@ -128,6 +133,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public boolean changePassword(String userId, ChangePasswordRequest req) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -137,7 +143,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         }
 
         if (!passwordEncoder.matches(req.getOldPassword(), user.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
         user.setPassword(passwordEncoder.encode(req.getNewPassword()));
@@ -148,6 +154,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public String sendOtp(String userId, OtpRequest req) throws MessagingException {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -224,5 +231,9 @@ public class AuthenticationServiceImplement implements AuthenticationService {
             });
         }
         return stringJoiner.toString();
+    }
+
+    public String fallbackMethod(Exception ex) {
+        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
     }
 }

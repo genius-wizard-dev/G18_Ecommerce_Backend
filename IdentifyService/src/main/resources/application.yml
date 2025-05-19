@@ -57,6 +57,14 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+resilience4j:
+  retry:
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 5s
+        retry-exceptions:
+          - java.lang.Exception
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}
     valid-duration: 3600
