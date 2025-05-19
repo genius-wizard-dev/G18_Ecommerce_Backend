@@ -34,3 +34,11 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+resilience4j:
+  retry:
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 5s
+        retry-exceptions:
+          - java.lang.Exception

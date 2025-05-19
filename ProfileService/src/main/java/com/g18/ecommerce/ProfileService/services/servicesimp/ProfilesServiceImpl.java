@@ -63,12 +63,9 @@ public class ProfilesServiceImpl implements ProfileService {
             throw new IllegalArgumentException("Message is null or empty");
         }
         try {
-            // Xử lý chuỗi JSON có dấu ngoặc kép bao quanh
             String jsonString = request;
             if (jsonString.startsWith("\"") && jsonString.endsWith("\"")) {
-                // Loại bỏ dấu ngoặc kép ở đầu và cuối
                 jsonString = jsonString.substring(1, jsonString.length() - 1);
-                // Giải mã các ký tự escape
                 jsonString = jsonString.replace("\\\"", "\"")
                         .replace("\\\\", "\\")
                         .replace("\\/", "/");

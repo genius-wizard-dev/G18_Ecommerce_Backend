@@ -11,6 +11,7 @@ import com.g18.ecommerce.ProfileService.mapper.AddressMapper;
 import com.g18.ecommerce.ProfileService.repositories.AddressRepository;
 import com.g18.ecommerce.ProfileService.repositories.ProfileRepository;
 import com.g18.ecommerce.ProfileService.services.AddressService;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class AddressServiceImpl implements AddressService {
     AddressMapper addressMapper;
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public AddressResponse createAddress(String profileId, AddressCreationRequest req) {
         var addresses = addressRepository.getAllByProfileId(profileId);
         if (CollectionUtils.isEmpty(addresses)) {
@@ -60,6 +62,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public List<AddressResponse> getAllAddressByProfileId(String profileId) {
         return getAllAddress(profileId).stream()
                 .map(obj -> {
@@ -89,6 +92,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public boolean setDefaultAddress(String profileId, String addressId) {
         var listAddress = getAllAddress(profileId);
         listAddress.forEach(address -> {
@@ -104,6 +108,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public AddressResponse updateAddressType(String addressId, String type) {
         var address = addressRepository.findById(addressId).orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         address.setType(AddressType.valueOf(type));
@@ -113,12 +118,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public boolean deleteAddress(String addressId) {
         addressRepository.deleteById(addressId);
         return true;
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public AddressResponse updateAddress(String addressId, UpdateAddressRequest req) {
 
         var foundAddress = addressRepository.findById(addressId)
@@ -132,5 +139,8 @@ public class AddressServiceImpl implements AddressService {
         foundAddress.setUpdatedAt(new Date(Instant.now().toEpochMilli()));
         var response = addressRepository.save(foundAddress);
         return addressMapper.toAddressResponse(response);
+    }
+    public String fallbackMethod(Exception ex) {
+        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
     }
 }
