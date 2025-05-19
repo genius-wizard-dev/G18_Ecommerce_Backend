@@ -14,6 +14,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class RegisterShopRequest {
 
-    @Size(max = 10, message = "INVALID_SHOP_NAME")
+    @Size(min = 10, message = "INVALID_SHOP_NAME")
     String shopName;
 }
