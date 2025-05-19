@@ -19,6 +19,7 @@ public class ProfileResponse {
     String email;
     String phoneNumber;
     String fullName;
+    String shopName;
     String shopId;
     Date birthDay;
 
