@@ -28,7 +28,7 @@ public class UpdateProfileRequest {
 
     String email;
     String phoneNumber;
-    @Size(max = 10, message = "INVALID_FULL_NAME")
+    @Size(min = 10, message = "INVALID_FULL_NAME")
     String fullName;
 
     @DobConstraint(min = 16, message = "INVALID_DOB")
