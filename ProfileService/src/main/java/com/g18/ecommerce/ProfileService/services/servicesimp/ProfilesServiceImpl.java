@@ -120,7 +120,7 @@ public class ProfilesServiceImpl implements ProfileService {
     public ProfileResponse registerShop(String profileId, RegisterShopRequest req) {
         var foundProfile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
-        if (!Objects.isNull(foundProfile.getShopId()))
+        if (Objects.isNull(foundProfile.getShopId()))
             foundProfile.setShopId(UUID.randomUUID().toString());
         foundProfile.setShopName(req.getShopName());
         var response = profileRepository.save(foundProfile);
