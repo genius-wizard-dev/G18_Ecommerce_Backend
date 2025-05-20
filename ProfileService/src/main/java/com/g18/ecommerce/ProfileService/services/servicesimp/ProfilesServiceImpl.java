@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.g18.ecommerce.ProfileService.dto.request.RegisterShopRequest;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,7 @@ public class ProfilesServiceImpl implements ProfileService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public ProfileResponse updateProfile(String id, UpdateProfileRequest request) {
         var foundProfile = profileRepository.findByUserId(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
@@ -117,6 +119,7 @@ public class ProfilesServiceImpl implements ProfileService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public ProfileResponse registerShop(String profileId, RegisterShopRequest req) {
         var foundProfile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
@@ -128,6 +131,7 @@ public class ProfilesServiceImpl implements ProfileService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public ProfileResponse getProfileByUserId(String userId) {
         var foundProfile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
@@ -135,10 +139,13 @@ public class ProfilesServiceImpl implements ProfileService {
     }
 
     @Override
+    @Retry(name = "default", fallbackMethod = "fallbackMethod")
     public boolean checkIsShop(String userId) {
         var foundProfile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.PROFILE_NOT_FOUND));
         return foundProfile.getShopId() != null;
     }
-
+    public String fallbackMethod(Exception ex) {
+        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
+    }
 }
