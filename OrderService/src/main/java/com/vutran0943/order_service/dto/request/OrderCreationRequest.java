@@ -14,5 +14,9 @@ import java.util.List;
 public class OrderCreationRequest {
     String discountId;
     String userId;
+    String paymentMethod;
+    String currency;
+    String description;
     List<OrderLineItemRequest> orderLineItemList;
+    double totalPrice;
 }

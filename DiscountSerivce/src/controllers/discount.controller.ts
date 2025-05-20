@@ -3,7 +3,9 @@ import createError from "http-errors";
 import { DiscountInput, UpdatedDiscountInput } from "../validation/discount.schema";
 import DiscountService from "../services/discount.service";
 import { Code } from "../shared/code";
-import { DiscountDocument } from "../models/discount.model";
+import Discount, { DiscountDocument } from "../models/discount.model";
+import { Cart, CartItem } from "../shared";
+import { convertToObjectId } from "../utils";
 
 class DiscountController {
     async createDiscountHandler(req: Request<{}, {}, DiscountInput["body"]>, res: Response, next: NextFunction) {
@@ -22,22 +24,103 @@ class DiscountController {
         }
     }
 
-    async applyDiscountHandler(
-        req: Request<{}, {}, { discountId: String; userIdList: String[] }>,
-        res: Response,
-        next: NextFunction
-    ) {
+    async applyDiscountHandler(req: Request<{}, {}, Cart>, res: Response, next: NextFunction) {
         try {
-            const { discountId, userIdList } = req.body;
-            console.log({ discountId, userIdList });
-            const discount = await DiscountService.addToUserUsedList(discountId, userIdList);
+            const { discountId, userId, cartItems } = req.body;
+            console.log(req.body);
+            const discount = await Discount.findById(discountId);
+            console.log(discount);
+            let totalPrice = 0;
+            let occurrences = 0;
+            let discountValue = 0;
+            let quantityPerUser = 0;
+            let appliedDiscountNum = 0;
+            let discountType = "";
+            let appliedProductType = "";
+            let appliedProductList: string[];
+            let newCartItemList: CartItem[] = [];
+            let userIdList: String[] = [];
 
-            res.status(201).json({
-                message: "Create discount successful",
-                data: discount,
-                code: Code.SUCCESS
-            });
+            if (discount == null) {
+                res.status(201).json({
+                    message: "Discount does not exist",
+                    data: null,
+                    code: Code.DISCOUNT_NOT_FOUND
+                });
+            } else {
+                discountValue = discount.discount_value;
+                discountType = discount.discount_type;
+                quantityPerUser = discount.quantity_per_user;
+                appliedProductList = discount.applied_product_list;
+                appliedProductType = discount.applied_product_type;
+
+                occurrences = discount.used_user_list.reduce((total, user) => {
+                    if (user.toString() === userId.toString()) return ++total;
+                    return total;
+                }, 0);
+
+                cartItems.forEach((cartItem) => {
+                    if (cartItem.appliedDiscount) appliedDiscountNum += 1;
+                });
+
+                if (occurrences + appliedDiscountNum > quantityPerUser) {
+                    res.status(201).json({
+                        message: "Discount does not enough",
+                        data: null,
+                        code: Code.DISCOUNT_NOT_ENOUGH
+                    });
+                } else {
+                    cartItems.forEach((cartItem) => {
+                        const cond1 =
+                            appliedProductType === "all" && cartItem.shopId.toString() === discount.shop.toString();
+                        const cond2 =
+                            appliedProductList?.includes(cartItem.productId.toString()) &&
+                            appliedProductType === "specific";
+
+                        if ((cond1 || cond2) && cartItem.appliedDiscount) {
+                            let finalPrice =
+                                discountType === "fixed"
+                                    ? cartItem.price - discountValue
+                                    : cartItem.price * (1 - discountValue);
+
+                            userIdList.push(userId);
+                            if (finalPrice < 0) finalPrice = 0;
+
+                            newCartItemList.push({
+                                ...cartItem,
+                                finalPrice,
+                                discountId
+                            });
+                        } else {
+                            newCartItemList.push({
+                                ...cartItem,
+                                finalPrice: cartItem.price,
+                                discountId
+                            });
+                        }
+
+                        const currentCartItem = newCartItemList[newCartItemList.length - 1];
+                        totalPrice += currentCartItem.finalPrice * currentCartItem.quantity;
+                    });
+
+                    await DiscountService.addToUserUsedList(discountId, userIdList);
+
+                    const cart = {
+                        ...req.body,
+                        id: req.body.cartId,
+                        cartItems: newCartItemList,
+                        totalPrice
+                    };
+
+                    res.status(201).json({
+                        message: "Apply discount successful",
+                        data: cart,
+                        code: Code.SUCCESS
+                    });
+                }
+            }
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }

@@ -9,17 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse> exception(Exception e) {
-//        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_ERROR;
-//        ApiResponse apiResponse = new ApiResponse();
-//
-//        apiResponse.setMessage(errorCode.getMessage());
-//        apiResponse.setCode(errorCode.getCode());
-//
-//
-//        return ResponseEntity.status(errorCode.getStatus()).body(apiResponse);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse> exception(Exception e) {
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_ERROR;
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setMessage(errorCode.getMessage());
+        apiResponse.setCode(errorCode.getCode());
+
+        return ResponseEntity.status(errorCode.getStatus()).body(apiResponse);
+    }
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiResponse> appException(AppException e) {

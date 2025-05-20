@@ -1,4 +1,4 @@
-package com.vutran0943.payment_service.shared;
+package com.vutran0943.payment_service.enums;
 
 import lombok.Getter;
 

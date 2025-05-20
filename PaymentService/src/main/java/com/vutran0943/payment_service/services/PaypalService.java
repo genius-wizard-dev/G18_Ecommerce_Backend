@@ -3,10 +3,14 @@ package com.vutran0943.payment_service.services;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import com.vutran0943.payment_service.dto.request.PaymentCreationRequest;
+import com.vutran0943.payment_service.dto.events.StockReservationSuccessEvent;
+import com.vutran0943.payment_service.dto.response.PaymentProcessResponse;
+import com.vutran0943.payment_service.entities.PaymentInspectionToken;
+import com.vutran0943.payment_service.exceptions.AppException;
+import com.vutran0943.payment_service.exceptions.ErrorCode;
 import com.vutran0943.payment_service.mappers.PaymentMapper;
 import com.vutran0943.payment_service.repositories.PaymentRepository;
-import com.vutran0943.payment_service.shared.PaymentStatus;
+import com.vutran0943.payment_service.enums.PaymentStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -38,12 +42,12 @@ public class PaypalService implements PaymentService {
     private final PaymentMapper paymentMapper;
 
     @Override
-    public String processPayment(PaymentCreationRequest paymentCreationRequest, HttpServletRequest request) throws PayPalRESTException {
-        double totalAmount = paymentCreationRequest.getAmount();
+    public PaymentProcessResponse processPayment(StockReservationSuccessEvent event) throws PayPalRESTException {
+        double totalAmount = event.getAmount();
         
-        String currency = paymentCreationRequest.getCurrency();
-        String description = paymentCreationRequest.getDescription();
-        String paymentMethod = paymentCreationRequest.getPaymentMethod().toString();
+        String currency = event.getCurrency();
+        String description = event.getDescription();
+        String paymentMethod = event.getPaymentMethod().toString();
 
         Payment payment = new Payment();
         String id = UUID.randomUUID().toString();
@@ -75,17 +79,20 @@ public class PaypalService implements PaymentService {
 
         for(Links links : createdPayment.getLinks()) {
             if (links.getRel().equals("approval_url")) {
-                com.vutran0943.payment_service.entities.Payment paymentEntity = paymentMapper.toPayment(paymentCreationRequest);
+                com.vutran0943.payment_service.entities.Payment paymentEntity = paymentMapper.toPayment(event);
                 paymentEntity.setId(id);
                 paymentEntity.setStatus(PaymentStatus.CREATED.toString());
 
                 paymentRepository.save(paymentEntity);
 
-                return links.getHref();
+                return PaymentProcessResponse.builder()
+                        .paymentUrl(links.getHref())
+                        .paymentId(id)
+                        .build();
             }
         }
 
-        return failedStatus;
+        throw new AppException(ErrorCode.INVALID_PAYMENT);
     }
 
     @Override
@@ -121,6 +128,11 @@ public class PaypalService implements PaymentService {
         paymentRepository.save(paymentEntity);
 
         return failedStatus;
+    }
+
+    @Override
+    public List<PaymentInspectionToken> getPaymentInspectionTokens(String paymentId) throws Exception {
+        return paymentRepository.findPaymentById(paymentId).getInspectionTokens();
     }
 
 }

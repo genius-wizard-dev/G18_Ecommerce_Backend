@@ -15,8 +15,10 @@ import java.math.BigDecimal;
 @Builder
 public class OrderLineItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
+    @Column(nullable = false)
+    String shopId;
     @Column(nullable = false)
     String productId;
     @Column(nullable = false)
@@ -26,8 +28,6 @@ public class OrderLineItem {
     @ManyToOne
     @JoinColumn(name="order_number", nullable = false)
     private Order order;
-    @Column(name = "discount_id")
-    String discountId;
     Double finalPrice;
     @Column(nullable = false)
     boolean appliedDiscount;
