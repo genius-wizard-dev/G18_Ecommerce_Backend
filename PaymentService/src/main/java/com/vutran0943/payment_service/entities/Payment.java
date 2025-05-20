@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -33,10 +36,10 @@ public class Payment {
     private String description;
     @Column(nullable = false)
     private String status;
-    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    private Timestamp createdAt;
-    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentInspectionToken> inspectionTokens = new ArrayList<>();
 }

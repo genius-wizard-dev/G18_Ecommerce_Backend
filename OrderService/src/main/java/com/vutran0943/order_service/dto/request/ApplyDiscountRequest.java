@@ -13,5 +13,6 @@ import java.util.List;
 @Builder
 public class ApplyDiscountRequest {
     private String discountId;
-    private List<String> userIdList;
+    private String orderNumber;
+    private List<String> productIdList;
 }

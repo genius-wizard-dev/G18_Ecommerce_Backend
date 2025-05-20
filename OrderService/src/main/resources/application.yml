@@ -1,12 +1,30 @@
 server:
-  port: 5001
+  port: ${env.APP_PORT}
   servlet:
     context-path: '/api'
 spring:
+  kafka:
+    bootstrap-servers: ${env.KAFKA_BOOTSTRAP_SERVERS}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username=${env.KAFKA_USERNAME}
+        password=${env.KAFKA_PASSWORD};
+    consumer:
+      group-id: order-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
   datasource:
-    url: "jdbc:mysql://localhost:3306/order-service?createDatabaseIfNotExist=true"
-    username: root
-    password: 123456a
+    url: ${env.MYSQL_URL}
+    username: ${env.MYSQL_USERNAME}
+    password: ${env.MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
@@ -15,6 +33,6 @@ spring:
   application:
     name: order-service
 other:
-  inventory-service-url: http://localhost:5000
-  discount-service-url: http://localhost:5002
+  discount-service-url: ${env.DISCOUNT_SERVICE_URL}
+
 
