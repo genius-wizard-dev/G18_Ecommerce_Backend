@@ -85,7 +85,7 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         try {
             verifyToken(token, false);
         } catch (AppException | JOSEException | ParseException e) {
-            isValid = false;
+            throw new AppException(ErrorCode.INVALID_TOKEN);
         }
         return IntrospectResponse.builder().valid(isValid).build();
     }
