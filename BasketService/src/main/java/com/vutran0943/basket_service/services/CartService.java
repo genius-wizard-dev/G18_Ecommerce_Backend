@@ -89,8 +89,17 @@ public class CartService {
 
     @Transactional
     public void updateCartStatus(String cartId) {
-        System.out.println("cartId: " + cartId);
         cartRepository.updateCartStatus(cartId, CartStatus.INACTIVE.toString());
+    }
+
+    public void deleteCartItem(String cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
+    }
+
+    @Transactional
+    public void deleteCart(String userId) {
+        Cart cart = cartRepository.getCartByUserIdAndStatus(userId, CartStatus.ACTIVE.toString());
+        cartItemRepository.deleteByCart(cart);
     }
 
     public CartItem changeItemQuantity(String cartItemId, int quantity) {

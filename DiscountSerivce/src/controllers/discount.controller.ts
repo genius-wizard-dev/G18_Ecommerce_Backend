@@ -113,7 +113,7 @@ class DiscountController {
                     };
 
                     res.status(201).json({
-                        message: "Create discount successful",
+                        message: "Apply discount successful",
                         data: cart,
                         code: Code.SUCCESS
                     });

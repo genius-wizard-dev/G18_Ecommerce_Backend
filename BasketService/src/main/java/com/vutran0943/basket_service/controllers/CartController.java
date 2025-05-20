@@ -119,4 +119,22 @@ public class CartController {
 
         return res;
     }
+
+    @DeleteMapping("/carts-items/{cartItemId}")
+    public ApiResponse deleteCartItem(@PathVariable String cartItemId) {
+        cartService.deleteCartItem(cartItemId);
+
+        return ApiResponse.builder()
+                .message("Delete cart item successfully")
+                .build();
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public ApiResponse deleteCart(@PathVariable String userId) {
+        cartService.deleteCart(userId);
+
+        return ApiResponse.builder()
+                .message("Delete cart successfully")
+                .build();
+    }
 }

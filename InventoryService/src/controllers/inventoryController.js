@@ -28,11 +28,40 @@ const inventoryController = {
         }
     },
 
+    getInventoryByProduct: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const inventory = await Inventory.findOne({ product_id: id });
+
+            res.json(inventory);
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching inventory", error });
+        }
+    },
+
     updateInventory: async (req, res) => {
         try {
             const { id } = req.params;
             const { total_quantity } = req.body;
             const inventory = await Inventory.findById(id);
+
+            if (!inventory) {
+                return res.status(404).json({ message: "Inventory item not found" });
+            }
+
+            inventory.total_quantity = total_quantity;
+            await inventory.save();
+            res.json({ message: "Inventory updated", inventory });
+        } catch (error) {
+            res.status(500).json({ message: "Error updating inventory", error });
+        }
+    },
+
+    updateInventoryByProduct: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { total_quantity } = req.body;
+            const inventory = await Inventory.findOne({ product_id: id });
 
             if (!inventory) {
                 return res.status(404).json({ message: "Inventory item not found" });

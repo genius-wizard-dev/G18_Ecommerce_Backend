@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class BasketServiceApplication {
 
 	public static void main(String[] args) {
+		System.out.print(">>>>>>>>> ok222");
 		SpringApplication.run(BasketServiceApplication.class, args);
 	}
 

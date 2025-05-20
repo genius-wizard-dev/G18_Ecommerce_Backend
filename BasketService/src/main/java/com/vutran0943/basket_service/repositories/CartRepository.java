@@ -14,4 +14,7 @@ public interface CartRepository extends JpaRepository<Cart, String> {
     @Modifying
     @Query("update Cart cart set cart.status = :status where cart.id = :cartId")
     public void updateCartStatus(@Param("cartId") String cartId, @Param("status") String status);
+    @Modifying
+    @Query("delete from Cart cart where cart.userId = :userId and cart.status = :status")
+    public void deleteCartByUserId(@Param("userId") String userId, @Param("status") String status);
 }
