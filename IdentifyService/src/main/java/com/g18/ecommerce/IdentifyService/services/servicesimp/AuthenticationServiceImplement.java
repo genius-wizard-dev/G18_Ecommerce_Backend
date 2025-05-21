@@ -233,7 +233,44 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         return stringJoiner.toString();
     }
 
-    public String fallbackMethod(Exception ex) {
-        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
+    // Fallback cho authenticate
+    public AuthenticationResponse fallbackMethod(AuthenticationRequest req, Throwable ex) {
+        return AuthenticationResponse.builder()
+                .token("fallback-token")
+                .expiryTime(new Date(System.currentTimeMillis() + 60000)) // Token tạm
+                .build();
     }
+
+    // Fallback cho introspect
+    public IntrospectResponse fallbackMethod(IntrospectRequest req, Throwable ex) {
+        return IntrospectResponse.builder()
+                .valid(false)
+                .build();
+    }
+
+    // Fallback cho logout (void)
+    public void fallbackMethod(LogoutRequest req, Throwable ex) {
+        log.error("Fallback logout: {}", ex.getMessage());
+    }
+
+    // Fallback cho refreshToken
+    public AuthenticationResponse fallbackMethod(RefreshRequest req, Throwable ex) {
+        return AuthenticationResponse.builder()
+                .token("fallback-refresh-token")
+                .expiryTime(new Date(System.currentTimeMillis() + 60000))
+                .build();
+    }
+
+    // Fallback cho changePassword
+    public boolean fallbackMethod(String userId, ChangePasswordRequest req, Throwable ex) {
+        log.error("Fallback changePassword: {}", ex.getMessage());
+        return false;
+    }
+
+    // Fallback cho sendOtp
+    public String fallbackMethod(String userId, OtpRequest req, Throwable ex) {
+        log.error("Fallback sendOtp: {}", ex.getMessage());
+        return "Không thể gửi mã OTP lúc này, vui lòng thử lại sau.";
+    }
+
 }
