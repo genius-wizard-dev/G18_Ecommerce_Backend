@@ -15,7 +15,6 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -30,13 +29,12 @@ import java.util.Objects;
 @Slf4j
 public class AddressServiceImpl implements AddressService {
 
-
     ProfileRepository profileRepository;
     AddressRepository addressRepository;
     AddressMapper addressMapper;
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "createAddressFallback")
     public AddressResponse createAddress(String profileId, AddressCreationRequest req) {
         var addresses = addressRepository.getAllByProfileId(profileId);
         if (CollectionUtils.isEmpty(addresses)) {
@@ -61,8 +59,13 @@ public class AddressServiceImpl implements AddressService {
         return addMoreAddress(profileId, req);
     }
 
+    public AddressResponse createAddressFallback(String profileId, AddressCreationRequest req, Exception ex) {
+        log.error("Fallback for createAddress triggered due to: {}", ex.getMessage());
+        return null;
+    }
+
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "getAllAddressByProfileIdFallback")
     public List<AddressResponse> getAllAddressByProfileId(String profileId) {
         return getAllAddress(profileId).stream()
                 .map(obj -> {
@@ -72,6 +75,11 @@ public class AddressServiceImpl implements AddressService {
                     return response;
                 })
                 .toList();
+    }
+
+    public List<AddressResponse> getAllAddressByProfileIdFallback(String profileId, Exception ex) {
+        log.error("Fallback for getAllAddressByProfileId triggered: {}", ex.getMessage());
+        return List.of();
     }
 
     private AddressResponse addMoreAddress(String profileId, AddressCreationRequest req) {
@@ -92,7 +100,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "setDefaultAddressFallback")
     public boolean setDefaultAddress(String profileId, String addressId) {
         var listAddress = getAllAddress(profileId);
         listAddress.forEach(address -> {
@@ -107,8 +115,13 @@ public class AddressServiceImpl implements AddressService {
         return address.isDefault();
     }
 
+    public boolean setDefaultAddressFallback(String profileId, String addressId, Exception ex) {
+        log.error("Fallback for setDefaultAddress triggered: {}", ex.getMessage());
+        return false;
+    }
+
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "updateAddressTypeFallback")
     public AddressResponse updateAddressType(String addressId, String type) {
         var address = addressRepository.findById(addressId).orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         address.setType(AddressType.valueOf(type));
@@ -117,17 +130,26 @@ public class AddressServiceImpl implements AddressService {
         return addressMapper.toAddressResponse(address);
     }
 
+    public AddressResponse updateAddressTypeFallback(String addressId, String type, Exception ex) {
+        log.error("Fallback for updateAddressType triggered: {}", ex.getMessage());
+        return null;
+    }
+
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "deleteAddressFallback")
     public boolean deleteAddress(String addressId) {
         addressRepository.deleteById(addressId);
         return true;
     }
 
-    @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
-    public AddressResponse updateAddress(String addressId, UpdateAddressRequest req) {
+    public boolean deleteAddressFallback(String addressId, Exception ex) {
+        log.error("Fallback for deleteAddress triggered: {}", ex.getMessage());
+        return false;
+    }
 
+    @Override
+    @Retry(name = "default", fallbackMethod = "updateAddressFallback")
+    public AddressResponse updateAddress(String addressId, UpdateAddressRequest req) {
         var foundAddress = addressRepository.findById(addressId)
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         foundAddress.setStreet(req.getStreet());
@@ -140,7 +162,10 @@ public class AddressServiceImpl implements AddressService {
         var response = addressRepository.save(foundAddress);
         return addressMapper.toAddressResponse(response);
     }
-    public String fallbackMethod(Exception ex) {
-        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
+
+    public AddressResponse updateAddressFallback(String addressId, UpdateAddressRequest req, Exception ex) {
+        log.error("Fallback for updateAddress triggered: {}", ex.getMessage());
+        return null;
     }
 }
+

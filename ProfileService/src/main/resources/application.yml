@@ -41,4 +41,6 @@ resilience4j:
         max-attempts: 3
         wait-duration: 5s
         retry-exceptions:
-          - java.lang.Exception
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - java.lang.RuntimeException

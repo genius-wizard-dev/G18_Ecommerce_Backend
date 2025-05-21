@@ -55,7 +55,7 @@ public class UserServiceImplement implements UserService {
     ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "createUserFallback")
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -70,69 +70,74 @@ public class UserServiceImplement implements UserService {
         } catch (Exception e) {
             throw new AppException(ErrorCode.CREATE_USER_ERROR);
         }
+
         ProfileCreationRequest profileRequest = profileMapper.toProfileCreationRequest(request);
         profileRequest.setUserId(user.getId());
         ProducerRecord<String, String> record = new ProducerRecord<>(Constant.PROFILE_ONBOARDING, gson.toJson(profileRequest));
-
         record.headers().add(new RecordHeader(KafkaHeaders.REPLY_TOPIC, Constant.PROFILE_ONBOARDED.getBytes(StandardCharsets.UTF_8)));
-        RequestReplyFuture<String, String, String> replyFuture =
-                replyingKafkaTemplate.sendAndReceive(record);
+
         try {
+            RequestReplyFuture<String, String, String> replyFuture = replyingKafkaTemplate.sendAndReceive(record);
             ConsumerRecord<String, String> consumerRecord = replyFuture.get(10, TimeUnit.SECONDS);
             String profileResponseJson = consumerRecord.value();
             ProfileResponse profileResponse = gson.fromJson(profileResponseJson, ProfileResponse.class);
             log.info("Received profileResponse: {}", profileResponse);
             var userResponse = userMapper.toUserResponse(user);
             userResponse.setProfileId(profileResponse.getId());
-            return  userResponse;
+            return userResponse;
         } catch (Exception e) {
             throw new AppException(ErrorCode.CREATE_PROFILE_ERROR);
         }
+    }
 
-
+    public UserResponse createUserFallback(UserCreationRequest request, Exception ex) {
+        log.error("Fallback for createUser triggered: {}", ex.getMessage());
+        return null;
     }
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "getMyInfoFallback")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
     }
 
-//    @Override
-//    public UserResponse updateUser(String userId, UserUpdateRequest request) {
-//        var foundUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-//        userMapper.updateUser(foundUser, request);
-//        foundUser.setPassword(passwordEncoder.encode(request.getPassword()));
-//        foundUser.setUpdatedAt(new Date(Instant.now().toEpochMilli()));
-//        var roles = roleRepository.findAllById(request.getRoles());
-//        foundUser.setRoles(new HashSet<>(roles));
-//
-//        return userMapper.toUserResponse(userRepository.save(foundUser));
-//    }
+    public UserResponse getMyInfoFallback(Exception ex) {
+        log.error("Fallback for getMyInfo triggered: {}", ex.getMessage());
+        return null;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "deleteUserFallback")
     public UserResponse deleteUser(String userId) {
         log.info("Delete user with id: {}", userId);
-        var foundUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        var foundUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         foundUser.setStatus(Status.valueOf(Constant.DELETED));
         kafkaTemplate.send(Constant.SUSPEND_PROFILE, userId);
         return userMapper.toUserResponse(userRepository.save(foundUser));
     }
 
+    public UserResponse deleteUserFallback(String userId, Exception ex) {
+        log.error("Fallback for deleteUser triggered: {}", ex.getMessage());
+        return null;
+    }
+
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "getUserFallback")
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
-    public String fallbackMethod(Exception ex) {
-        return "Hệ thống hiện đang bận, vui lòng thử lại sau.";
+    public UserResponse getUserFallback(String id, Exception ex) {
+        log.error("Fallback for getUser triggered: {}", ex.getMessage());
+        return null;
     }
 }
+
