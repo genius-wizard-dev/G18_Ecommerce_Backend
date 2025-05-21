@@ -22,5 +22,6 @@ public class ProfileResponse {
     String shopName;
     String shopId;
     Date birthDay;
-
+    Date createdAt;
+    Date updatedAt;
 }

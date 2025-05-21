@@ -62,9 +62,12 @@ resilience4j:
     instances:
       default:
         max-attempts: 3
-        wait-duration: 5s
+        wait-duration: 2s
         retry-exceptions:
-          - java.lang.Exception
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - java.lang.RuntimeException
+
 jwt:
     signerKey: ${env.SIGNER_KEY_VALUE}
     valid-duration: 3600

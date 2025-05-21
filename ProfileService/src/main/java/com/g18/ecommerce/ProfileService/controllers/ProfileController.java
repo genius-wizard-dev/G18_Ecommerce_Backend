@@ -8,7 +8,10 @@ import com.g18.ecommerce.ProfileService.services.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,4 +44,21 @@ public class ProfileController {
                 .result(profileService.checkIsShop(userId))
                 .build();
     }
+
+    @GetMapping("/shop/{shopId}")
+    public ApiResponse<ProfileResponse> getShopById( @PathVariable String shopId){
+        return ApiResponse.<ProfileResponse>builder()
+                .result(profileService.getUserByShopId(shopId))
+                .build();
+    }
+
+    @GetMapping("/shop/search/{name}")
+    public ApiResponse<List<ProfileResponse>> getListShopByName(@PathVariable String name){
+        return ApiResponse.<List<ProfileResponse>>builder()
+                .result(profileService.findShopsByName(name))
+                .build();
+    }
+
+
+
 }
