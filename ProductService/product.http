@@ -9,32 +9,29 @@ GET {{url}}/api/products/67c9c3b423bf99ae1f9318d8
 DELETE {{url}}/api/products/67c5cca05d4a4541999918eb
 
 
-### 
+###
 POST {{url}}/api/products
 Content-Type: application/json
 
 {
-  "name": "Iphone 16",
-  "description": "A premium leather tote bag perfect for everyday use.",
-  "price": 399.99,
-  "category": "WomenBags",
+  "name": "Cotton Graphic Tee",
+  "description": "A comfortable cotton t-shirt with a trendy graphic print.",
+  "price": 19.99,
+  "category": "Clothes",
   "attribute": {
-    "brand": "Luettgen Luxe",
-    "description": "Spacious and durable leather tote.",
+    "brand": "TrendyWear",
+    "description": "Soft and breathable fabric.",
     "isActive": true,
-    "material": "Leather",
-    "size": "Large",
-    "color": ["Black", "Tan", "Red"],
-    "bagType": "Tote"
+    "material": "Cotton",
+    "size": ["S", "M", "L"],
+    "color": ["Black", "White"],
+    "pattern": ["Graphic"]
   },
-  "images": [
-    "https://loremflickr.com/640/480/handbag?lock=4666984922277096",
-    "https://loremflickr.com/640/480/handbag?lock=123456789"
-  ],
-  "thumbnailImage": "https://loremflickr.com/200/200/handbag?lock=8422139310709839",
+  "images": ["https://loremflickr.com/640/480/fashion"],
+  "thumbnailImage": "https://loremflickr.com/200/200/fashion",
   "ratings": {
-    "average": 4.2,
-    "count": 100
+    "average": 4.5,
+    "count": 120
   },
   "isActive": true,
   "tags": ["new", "luxury", "sale"]
