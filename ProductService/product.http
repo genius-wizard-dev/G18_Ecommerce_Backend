@@ -1,14 +1,16 @@
-GET http://localhost:3500/api/products?page=2&limit=5&category=Clothes
+@url=https://product-service-oj26.onrender.com
+
+GET {{url}}/api/products?page=1&limit=5&category=Clothes
 
 ###
-GET https://product-service-oj26.onrender.com/api/products/681864006b9150b157a9810a
+GET {{url}}/api/products/67c9c3b423bf99ae1f9318d8
 
 ###
-DELETE http://localhost:3500/api/products/67c5cca05d4a4541999918eb
+DELETE {{url}}/api/products/67c5cca05d4a4541999918eb
 
 
-### 
-POST http://localhost:3500/api/products
+###
+POST {{url}}/api/products
 Content-Type: application/json
 
 {
@@ -32,5 +34,5 @@ Content-Type: application/json
     "count": 120
   },
   "isActive": true,
-  "tags": ["casual", "cotton"]
+  "tags": ["new", "luxury", "sale"]
 }

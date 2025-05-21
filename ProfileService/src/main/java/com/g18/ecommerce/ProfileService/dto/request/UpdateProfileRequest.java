@@ -1,6 +1,7 @@
 package com.g18.ecommerce.ProfileService.dto.request;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.g18.ecommerce.ProfileService.validator.DobConstraint;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -9,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -26,10 +26,12 @@ public class UpdateProfileRequest {
     )
     String avatar;
 
-    @Size(max = 10, message = "INVALID_DISPLAY_NAME")
-    String displayName;
+    String email;
+    String phoneNumber;
+    @Size(max = 10, message = "INVALID_FULL_NAME")
+    String fullName;
 
     @DobConstraint(min = 16, message = "INVALID_DOB")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     Date birthDay;
 }

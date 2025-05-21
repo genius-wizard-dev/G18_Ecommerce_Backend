@@ -15,4 +15,6 @@ public class CartItemResponse {
     private String productId;
     private int quantity;
     private double price;
+    private double finalPrice;
+    private boolean appliedDiscount;
 }

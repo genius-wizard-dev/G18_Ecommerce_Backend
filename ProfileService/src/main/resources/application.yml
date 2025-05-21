@@ -11,15 +11,22 @@ spring:
     name: profile-service
   datasource:
     url: ${env.SQL_URL}
-    driverClassName: "com.mysql.cj.jdbc.Driver"
     username: ${env.SQL_USER}
     password: ${env.SQL_PASSWORD}
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="Hum3XtGsrjBdhXTDUZnmgZbqbrIBdO";
     consumer:
       group-id: profile-group
       auto-offset-reset: earliest
@@ -27,3 +34,11 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+resilience4j:
+  retry:
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 5s
+        retry-exceptions:
+          - java.lang.Exception

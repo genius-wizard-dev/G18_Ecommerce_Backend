@@ -13,6 +13,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class AddressCreationRequest {
     String street;
+    String ward;
+    String district;
     String city;
     String detail;
     String type;

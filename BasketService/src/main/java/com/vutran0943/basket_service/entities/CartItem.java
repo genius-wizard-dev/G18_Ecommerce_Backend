@@ -2,10 +2,7 @@ package com.vutran0943.basket_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -18,12 +15,17 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Cart cart;
     @Column(name = "product_id", nullable = false)
     private String productId;
     @Column(name = "shop_id", nullable = false)
     private String shopId;
     private int quantity;
+    @Column(nullable = false)
     private double price;
+    @Column(nullable = false)
+    private double finalPrice;
+    private boolean appliedDiscount;
 }

@@ -16,9 +16,11 @@ public enum ErrorCode {
     ACCOUNT_LOCKED(1011, "Account locked", HttpStatus.FORBIDDEN),
     PROFILE_NOT_FOUND(1012, "Profile not found", HttpStatus.NOT_FOUND),
     INVALID_DOB(1013, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-    INVALID_DISPLAY_NAME(1014, "Display name must be at least {min} characters", HttpStatus.BAD_REQUEST),
+    INVALID_SHOP_NAME(1014, "Shop name must be at less than {max} characters", HttpStatus.BAD_REQUEST),
+    INVALID_FULL_NAME(1014, "Full name must be at less than {max} characters", HttpStatus.BAD_REQUEST),
     INVALID_AVATAR_URL(1015, "Avatar is not a valid URL", HttpStatus.BAD_REQUEST),
     ADDRESS_NOT_FOUND(1016, "Address not found", HttpStatus.NOT_FOUND),
+    ADDRESS_ALREADY_EXISTS(1017, "Address already exists", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

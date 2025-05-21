@@ -1,0 +1,21 @@
+package com.g18.ecommerce.ProfileService.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+public class UpdateAddressRequest {
+    String street;
+    String ward;
+    String district;
+    String city;
+    String detail;
+    String phoneShip;
+}

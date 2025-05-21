@@ -1,0 +1,71 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /identity
+
+
+spring:
+  data:
+    redis:
+      host: ${env.REDIS_HOST}
+      password: ${env.REDIS_PASSWORD}
+      port: 14219
+  main:
+    banner-mode: off
+  application:
+    name: identity-service
+  datasource:
+    url: ${env.SQL_URL}
+    username: ${env.SQL_USER}
+    password: ${env.SQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  liquibase:
+    url: ${env.SQL_URL}
+    enabled: true
+    user: ${env.SQL_USER}
+    password: ${env.SQL_PASSWORD}
+    change-log: classpath:db/changelog/changelog-master.xml
+  kafka:
+    bootstrap-servers: ${env.URL_BOOTSTRAP}
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="Hum3XtGsrjBdhXTDUZnmgZbqbrIBdO";
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: onboarded-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+          spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${env.MAIL_USERNAME}
+    password: ${env.MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+resilience4j:
+  retry:
+    instances:
+      default:
+        max-attempts: 3
+        wait-duration: 5s
+        retry-exceptions:
+          - java.lang.Exception
+jwt:
+    signerKey: ${env.SIGNER_KEY_VALUE}
+    valid-duration: 3600
+    refreshable-duration: 36000

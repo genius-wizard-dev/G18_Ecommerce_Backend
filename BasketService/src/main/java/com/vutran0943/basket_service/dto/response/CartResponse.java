@@ -15,5 +15,7 @@ public class CartResponse {
     private String id;
     private String userId;
     private String status;
+    private String discountId;
     private List<CartItemResponse> cartItems;
+    private double totalPrice;
 }

@@ -18,6 +18,8 @@ public class AddressResponse {
     String id;
     String profileId;
     String street;
+    String ward;
+    String district;
     String city;
     String detail;
     String type;
