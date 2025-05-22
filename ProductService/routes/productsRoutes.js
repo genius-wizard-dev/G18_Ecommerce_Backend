@@ -8,6 +8,7 @@ const verifyJWT = require("../middleware/verifyJWT");
 // Create a new product
 router.post(
     "/",
+    verifyJWT,
     verifyRoles(ROLES_LIST.Admin, ROLES_LIST.User),
     productController.createProduct
 );
