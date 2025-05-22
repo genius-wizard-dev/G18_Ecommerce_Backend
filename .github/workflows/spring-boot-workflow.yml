@@ -22,9 +22,8 @@ jobs:
       basket_changed: ${{ steps.basket.outputs.changed }}
     steps:
       - uses: actions/checkout@v3
-
-      - name: Fetch remote main
-        run: git fetch origin main
+        with:
+          fetch-depth: 0 
 
       - id: profile
         run: |
