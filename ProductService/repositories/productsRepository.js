@@ -4,8 +4,8 @@ const Product = require("../models/product");
 function normalizeVietnamese(str) {
     return str
         .toLowerCase()
-        .normalize("NFD") // decompose characters
-        .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
         .replace(/đ/g, "d")
         .replace(/Đ/g, "D");
 }
