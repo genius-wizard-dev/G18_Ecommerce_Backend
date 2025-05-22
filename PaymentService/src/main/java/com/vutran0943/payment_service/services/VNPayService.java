@@ -1,11 +1,12 @@
 package com.vutran0943.payment_service.services;
 
-import com.vutran0943.payment_service.dto.request.PaymentCreationRequest;
+import com.vutran0943.payment_service.dto.events.StockReservationSuccessEvent;
+import com.vutran0943.payment_service.dto.response.PaymentProcessResponse;
 import com.vutran0943.payment_service.entities.Payment;
+import com.vutran0943.payment_service.entities.PaymentInspectionToken;
 import com.vutran0943.payment_service.mappers.PaymentMapper;
 import com.vutran0943.payment_service.repositories.PaymentRepository;
-import com.vutran0943.payment_service.shared.PaymentMethod;
-import com.vutran0943.payment_service.shared.PaymentStatus;
+import com.vutran0943.payment_service.enums.PaymentStatus;
 import com.vutran0943.payment_service.utils.VnpayUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +43,12 @@ public class VNPayService implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public String processPayment(PaymentCreationRequest paymentCreationRequest, HttpServletRequest req) throws UnsupportedEncodingException {
-        int amount = (int) (paymentCreationRequest.getAmount() * 100);
-        String bankCode = paymentCreationRequest.getBankCode();
-        String description = paymentCreationRequest.getDescription();
+    public PaymentProcessResponse processPayment(StockReservationSuccessEvent event) throws UnsupportedEncodingException {
+        int amount = (int) (event.getAmount() * 100);
+        String bankCode = event.getBankCode();
+        String description = event.getDescription();
         String vnp_TxnRef = vnpayUtils.getRandomNumber(8);
-        String vnp_IpAddr = vnpayUtils.getIpAddress(req);
+        String vnp_IpAddr = event.getIpAddress();
         String paymentId = UUID.randomUUID().toString();
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -65,12 +66,7 @@ public class VNPayService implements PaymentService {
         vnp_Params.put("vnp_OrderInfo", description + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
-        String locate = req.getParameter("language");
-        if (locate != null && !locate.isEmpty()) {
-            vnp_Params.put("vnp_Locale", locate);
-        } else {
-            vnp_Params.put("vnp_Locale", "vn");
-        }
+        vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", vnp_ReturnUrl + String.format("/%s", paymentId));
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
@@ -118,13 +114,17 @@ public class VNPayService implements PaymentService {
 
         String paymentUrl = vnp_PayUrl + "?" + queryUrl;
 
-        Payment payment = paymentMapper.toPayment(paymentCreationRequest);
+        Payment payment = paymentMapper.toPayment(event);
         payment.setStatus(PaymentStatus.CREATED.toString());
         payment.setId(paymentId);
 
         paymentRepository.save(payment);
 
-        return paymentUrl;
+
+        return PaymentProcessResponse.builder()
+                .paymentId(paymentId)
+                .paymentUrl(paymentUrl)
+                .build();
     }
 
     @Override
@@ -148,9 +148,15 @@ public class VNPayService implements PaymentService {
 
         String status = PaymentStatus.FAILED.toString();
 
-        payment.setStatus(PaymentStatus.FAILED.toString());
+        payment.setStatus(status);
         paymentRepository.save(payment);
 
+        System.out.println(status);
         return status;
+    }
+
+    @Override
+    public List<PaymentInspectionToken> getPaymentInspectionTokens(String paymentId) throws Exception {
+        return paymentRepository.findPaymentById(paymentId).getInspectionTokens();
     }
 }

@@ -1,16 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const cors = require("cors");
+// const cors = require("cors");s
 const helmet = require("helmet");
 const morgan = require("morgan");
-const corsOptions = require("./config/corsOptions");
+// const corsOptions = require("./config/corsOptions");
 const cookieParser = require("cookie-parser");
-const credentials = require("./middleware/credentials");
+// const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 const productRoutes = require("./routes/productsRoutes");
-const { connectProducer } = require("./kafka/producer");
+const verifyJWT = require("./middleware/verifyJWT");
 const PORT = process.env.PORT || 3500;
 
 // connect to mongoDB
@@ -18,10 +18,10 @@ connectDB();
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
-app.use(credentials);
+// app.use(credentials);
 
 // Cross Origin Resource Sharing
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: true }));
@@ -38,6 +38,8 @@ app.use(helmet());
 //middleware for cookies
 app.use(cookieParser());
 
+app.use(verifyJWT);
+
 // routes
 // app.use("/", require("./routes/root"));
 app.use("/api/products", productRoutes);
@@ -48,6 +50,6 @@ app.all("*", (req, res) => {
 
 mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB");
-    connectProducer().then(() => console.log("Kafka Producer connected"));
+    // connectProducer().then(() => console.log("Kafka Producer connected"));
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });

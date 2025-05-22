@@ -6,7 +6,7 @@ const [DOC, COL] = ["dicount", "discounts"];
 const conn = Database.getInstance(DBType.MONGODB).getConnection() as Connection;
 
 export interface DiscountDocument extends Document {
-    shop: Schema.Types.ObjectId;
+    shop: string;
     name: string;
     code: string;
     start_time: Date;
@@ -16,9 +16,9 @@ export interface DiscountDocument extends Document {
     min_price_product: number;
     quantity: number;
     quantity_per_user: number;
-    used_user_list: Schema.Types.ObjectId[];
+    used_user_list: string[];
     applied_product_type: string;
-    applied_product_list: Schema.Types.ObjectId[];
+    applied_product_list: string[];
     is_private: boolean;
     is_active: boolean;
 }
@@ -26,7 +26,7 @@ export interface DiscountDocument extends Document {
 const DiscountSchema = new Schema<DiscountDocument>(
     {
         shop: {
-            type: Schema.Types.ObjectId
+            type: String
         },
         name: {
             type: String,
@@ -65,7 +65,7 @@ const DiscountSchema = new Schema<DiscountDocument>(
             default: 0
         },
         used_user_list: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: []
         },
         applied_product_type: {
@@ -73,7 +73,7 @@ const DiscountSchema = new Schema<DiscountDocument>(
             enum: ["all", "specific"]
         },
         applied_product_list: {
-            type: [Schema.Types.ObjectId],
+            type: [String],
             default: []
         },
         is_private: {

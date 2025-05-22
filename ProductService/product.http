@@ -1,39 +1,77 @@
-GET http://localhost:3500/api/products?page=2&limit=5&category=Clothes
+@url = http://localhost:3500/api/products
+@token = Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHMTggRWNvbW1lcmNlIiwic3ViIjoiSm9objEyMyIsImV4cCI6MTc0Nzg4NzQ0MSwiaWF0IjoxNzQ3ODgzODQxLCJqdGkiOiJiY2Q0NmVkNy0zYTE0LTQ2ZWYtOTJmNC1jNWJkODIzOTEyMWUiLCJzY29wZSI6IlJPTEVfVVNFUiAwMDAwIn0.PteJiJga7KZkyLFDSBDRIPUFFGOdwKtVyPZO0WvH7kQkPpcnNb0mIIcztZoVITF6o8Dlqv8P0DUIA0zQul4FWQ
+
+GET {{url}}?search=%C3%A1
+Authorization: {{token}}
 
 ###
-GET http://localhost:3500/api/products/67c9c3b423bf99ae1f9318d8
+GET {{url}}/6829a1ecd0200ef461827996
+Authorization: {{token}}
 
 ###
-DELETE http://localhost:3500/api/products/67c5cca05d4a4541999918eb
-
-
-### 
-POST http://localhost:3500/api/products
+DELETE {{url}}/6829a1ecd0200ef461827996
 Content-Type: application/json
+Authorization: {{token}}
 
 {
-  "name": "Iphone 16",
-  "description": "A premium leather tote bag perfect for everyday use.",
-  "price": 399.99,
-  "category": "WomenBags",
+  "shopId": "78ae67b6-da49-4722-99ba-43dbb67946a8"
+}
+
+### 
+PUT {{url}}/6829a1ecd0200ef461827996
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "name": "Điện thoại OPPO Reno13 5G",
+  "shopId": "029bb9a2-7f2d-4abf-b3f8-af7c75e23215",
+  "description": "Điện thoại OPPO Reno13 5G (Bảo Hành 3 Tháng 1 Đổi 1) - Phụ Kiện Điện Thoại Rio.",
+  "price": 799000,
+  "category": "Mobile",
   "attribute": {
-    "brand": "Luettgen Luxe",
-    "description": "Spacious and durable leather tote.",
-    "isActive": true,
-    "material": "Leather",
-    "size": "Large",
-    "color": ["Black", "Tan", "Red"],
-    "bagType": "Tote"
+    "brand": "Oppo",
+    "screenSize": "6.7 inches",
+    "ram": [
+      "8GB"
+    ],
+    "storage": [
+      "128GB",
+      "256GB"
+    ],
+    "operatingSystem": "Android",
+    "battery": "4500mAh",
+    "camera": {
+      "rear": [
+        "48MP",
+        "12MP"
+      ],
+      "front": [
+        "20MP"
+      ]
+    },
+    "color": [
+      "Black",
+      "Silver"
+    ]
   },
   "images": [
-    "https://loremflickr.com/640/480/handbag?lock=4666984922277096",
-    "https://loremflickr.com/640/480/handbag?lock=123456789"
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m7vnz8w1sz771a.webp"
   ],
-  "thumbnailImage": "https://loremflickr.com/200/200/handbag?lock=8422139310709839",
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m7vnz8w1rkcm76.webp",
   "ratings": {
-    "average": 4.2,
-    "count": 100
+    "average": 4.8,
+    "count": 300
   },
-  "isActive": false,
-  "tags": ["new", "luxury", "sale"]
+  "isActive": true,
+  "tags": [
+    "tech",
+    "smartphone"
+  ],
+  "createdAt": {
+    "$date": "2025-05-18T09:01:32.405Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-18T09:01:32.405Z"
+  },
+  "__v": 0
 }

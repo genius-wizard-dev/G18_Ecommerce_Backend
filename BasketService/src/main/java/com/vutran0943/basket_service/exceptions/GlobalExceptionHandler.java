@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(e.getMessage());
         apiResponse.setCode(e.getCode());
 
-        return ResponseEntity.status(e.getCode()).body(apiResponse);
+        return ResponseEntity.status(e.getStatus()).body(apiResponse);
     }
 
     @ExceptionHandler(RuntimeException.class)

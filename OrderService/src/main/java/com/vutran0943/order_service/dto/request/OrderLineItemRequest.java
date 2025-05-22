@@ -10,8 +10,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderLineItemRequest {
+    String shopId;
     String productId;
     int quantity;
     double price;
+    double finalPrice;
     boolean appliedDiscount;
 }

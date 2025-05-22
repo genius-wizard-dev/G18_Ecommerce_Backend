@@ -6,9 +6,18 @@ import router from "./routers";
 import defaultConfig from "./config/default.config";
 import { ZodError } from "zod";
 import { Code } from "./shared/code";
+import cors, { CorsOptions } from "cors";
 
 const app: Express = express();
 const { ENV } = defaultConfig;
+
+var corsOptions: CorsOptions = {
+    origin: function (origin, callback) {
+        callback(null, true);
+    }
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());

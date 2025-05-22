@@ -1,0 +1,34 @@
+server:
+  port: 5001
+  servlet:
+    context-path: '/api'
+spring:
+  kafka:
+    bootstrap-servers: d09jle9qploprptlaneg.any.ap-south-1.mpx.prd.cloud.redpanda.com:9092
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.jaas.config: >
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="g18ecommerce"
+        password="tTozU3DovkwkLqTGSBbaUNrEC2Dy0B";
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
+  datasource:
+    url: "jdbc:mysql://localhost:3306/order-service?createDatabaseIfNotExist=true"
+    username: root
+    password: 123456a
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  application:
+    name: order-service
+other:
+  inventory-service-url: http://localhost:5000
+  discount-service-url: http://localhost:5002
+
+

@@ -1,208 +1,345 @@
-
+@url=https://product-service-oj26.onrender.com/api/products
 ### 1. Clothes
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "Cotton Graphic Tee",
-  "description": "A comfortable cotton t-shirt with a trendy graphic print.",
-  "price": 19.99,
+  "name": "Áo Khoác Gió Nam Nữ 2 Lớp",
+  "shopId": "1",
+  "description": "Áo khoác gió nam nữ được thiết kế với tính năng đặc biệt giúp người mặc đi dưới mưa thoải mái. Áo gió là sản phẩm cao cấp được may và kiểm duyệt tại Việt Nam 100%, với chất liệu thân thiện môi trường, cùng thông điệp \"Người Việt dùng hàng Việt\" chắc chắn sẽ làm hài lòng bạn dù bất kì lí do nào.",
+  "price": 99000,
   "category": "Clothes",
   "attribute": {
-    "brand": "TrendyWear",
-    "description": "Soft and breathable fabric.",
-    "isActive": true,
-    "material": "Cotton",
-    "size": ["S", "M", "L"],
-    "color": ["Black", "White"],
-    "pattern": ["Graphic"]
+    "brand": "Hola",
+    "material": "Tráng Bạc",
+    "size": ["M", "L", "XL", "XXL"],
+    "color": ["Xám", "Đen"],
+    "pattern": ["Trơn"]
   },
-  "images": ["https://loremflickr.com/640/480/fashion"],
-  "thumbnailImage": "https://loremflickr.com/200/200/fashion",
+  "images": [
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ll7kprkoo4ae33.webp",
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ll7kprkoqxfa12.webp",
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ll7lqeboiyfc01.webp"
+  ],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ln556i06ykab1c.webp",
   "ratings": {
-    "average": 4.5,
-    "count": 120
+    "average": 4.7,
+    "count": 441
   },
   "isActive": true,
-  "tags": ["casual", "cotton"]
+  "tags": ["aogio", "aogionam"]
+}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name": "Áo Thun Polo Nam Thêu Chữ U",
+  "shopId": "1",
+  "description": "Chất Liệu Thấm Hút Mồ Hôi,Cổ Phối Màu",
+  "price": 39000,
+  "category": "Clothes",
+  "attribute": {
+    "brand": "UVU",
+    "material": "Cotton",
+    "size": ["M", "L", "XL", "XXL"],
+    "color": ["Trắng", "Xanh Đậm", "Xanh nhạt"],
+    "pattern": ["Trơn"]
+  },
+  "images": [
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsmmb9kjp6mc0b.webp",
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lrol6kavve6xe3.webp",
+    "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsmmb9kjql6sd5.webp"
+  ],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lrol6kavr6hl42.webp",
+  "ratings": {
+    "average": 4.8,
+    "count": 2800
+  },
+  "isActive": true,
+  "tags": ["aothun", "aopolonam"]
 }
 
 ### 2. Mobile
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "Galaxy Pro 12",
-  "description": "A high-performance smartphone with a stunning display.",
-  "price": 799.99,
+  "name": "Điện thoại Realme Neo 7",
+  "shopId": "1",
+  "description": "Điện thoại Realme Neo 7 - (Bảo Hành 3 Tháng 1 Đổi 1) - Phụ Kiện Điện Thoại Rio",
+  "price": 7950000,
   "category": "Mobile",
   "attribute": {
-    "brand": "Samsung",
-    "description": "Latest model with advanced features.",
-    "isActive": true,
-    "screenSize": "6.7 inches",
-    "ram": ["8GB"],
-    "storage": ["128GB", "256GB"],
+    "brand": "Oppo",
+    "screenSize": "6.78 inches",
+    "ram": ["12GB"],
+    "storage": ["256GB"],
     "operatingSystem": "Android",
-    "battery": "4500mAh",
+    "battery": "7000mAh",
     "camera": {
-      "rear": ["48MP", "12MP"],
-      "front": ["20MP"]
+      "rear": ["50MP", "8MP"],
+      "front": ["16MP"]
     },
-    "color": ["Black", "Silver"]
+    "color": ["Đen", "Trắng"]
   },
-  "images": ["https://loremflickr.com/640/480/smartphone"],
-  "thumbnailImage": "https://loremflickr.com/200/200/smartphone",
+  "images": ["https://down-vn.img.susercontent.com/file/sg-11134201-7reov-m81cilfehy2oec.webp", "https://down-vn.img.susercontent.com/file/sg-11134201-7req1-m81cilmma949f3.webp", "https://down-vn.img.susercontent.com/file/sg-11134201-7renx-m81cilz3qkcxf0.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m81po41utw7880.webp",
   "ratings": {
-    "average": 4.8,
-    "count": 300
+    "average": 5,
+    "count": 15
   },
   "isActive": true,
-  "tags": ["tech", "smartphone"]
+  "tags": ["RealmeNeo7", "RealmeNeo7Dimensity9300Plus"]
 }
 
 ### 3. Electronics
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "LED Smart TV 55\"",
-  "description": "Ultra HD smart television with streaming capabilities.",
-  "price": 549.99,
+  "name": "SMART Tivi FHD 43 Inch 43S3U+ Coocaa",
+  "shopId": "1",
+  "description": "Tivi thông minh coocaa 43 43S3U+\\n- Quà tặng : cliptv 1 năm, FPT 12 tháng gói family + 6 tháng VOD 4K\\n- CC cast, youtube, Game, Boundless screen, Dolby audio\\n- Coolita TV Coocaa S3U+ - Trải nghiệm Giải trí Đỉnh Cao, Nâng Tầm Phong Cách Sống",
+  "price": 4399000,
   "category": "Electronics",
   "attribute": {
-    "brand": "VisionTech",
-    "description": "Energy-efficient LED display.",
-    "isActive": true,
-    "powerConsumption": "120W",
-    "dimensions": "48.5 x 28 x 3 inches",
+    "brand": "Coocaa",
+    "powerConsumption": "220W",
+    "dimensions": "43 x 30 x 2.5 inches",
     "connectivity": ["HDMI", "Wi-Fi", "Bluetooth"],
-    "warranty": "2 years"
+    "warranty": "1 năm"
   },
-  "images": ["https://loremflickr.com/640/480/television"],
-  "thumbnailImage": "https://loremflickr.com/200/200/television",
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lx0ylf8ismhl08.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lx0ylf8iekm390.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lx0ylf8hxpzt7d.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m9pvdnpjy9he30.webp",
   "ratings": {
-    "average": 4.6,
-    "count": 85
+    "average": 4.9,
+    "count": 1400
   },
   "isActive": true,
-  "tags": ["electronics", "smart-tv"]
+  "tags": ["tivi", "coocaa"]
+}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name": "Bộ phát wifi 2 râu",
+  "shopId": "1",
+  "description": "Cục phát wifi loại khá đẹp 300mps, Nếu có yêu cầu cài đặt sẵn tên wifi và mật khẩu anh chị ghi trong mục lưu ý cho người bán hoặc tin nhắn.",
+  "price": 85000,
+  "category": "Electronics",
+  "attribute": {
+    "brand": "TPLink",
+    "powerConsumption": "80W",
+    "dimensions": "35 x 25 x 3 cm",
+    "connectivity": ["Wi-Fi"],
+    "warranty": "1.5 năm"
+  },
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lx0ylf8ismhl08.webp", "https://down-vn.img.susercontent.com/file/e7ececac36f9d905d082f2057999f338.webp", "https://down-vn.img.susercontent.com/file/24888d37c8536c61fb816325a36edfe2.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lru1hyr1gfr80d.webp",
+  "ratings": {
+    "average": 4.9,
+    "count": 101
+  },
+  "isActive": true,
+  "tags": ["TPLink", "RouterWifi"]
 }
 
 ### 4. Computer
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "UltraBook Pro 15",
-  "description": "Lightweight laptop for professional use.",
-  "price": 1299.99,
+  "name": "Lenovo 14 inch 2025 Máy tính mới Intel Core i5",
+  "shopId": "1",
+  "description": "Máy tính của chúng tôi là hoàn toàn mới, cài đặt Windows 11 và MS Office miễn phí!",
+  "price": 8129000,
   "category": "Computer",
   "attribute": {
-    "brand": "TechNova",
-    "description": "High-performance computing.",
-    "isActive": true,
-    "processor": "Intel i7-12th Gen",
-    "ram": ["16GB"],
+    "brand": "Lenovo",
+    "processor": "Intel Core i5-8365U",
+    "ram": ["8GB"],
     "storageType": "SSD",
     "operatingSystem": ["Windows 11"]
   },
-  "images": ["https://loremflickr.com/640/480/laptop"],
-  "thumbnailImage": "https://loremflickr.com/200/200/laptop",
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m73bwspumzq034.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m73bwspuoeag2f.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m73bwspupsuw0a.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m73bwspumzp4a4.webp",
   "ratings": {
     "average": 4.7,
     "count": 150
   },
   "isActive": true,
-  "tags": ["laptop", "tech"]
+  "tags": ["laptop", "lenovo"]
 }
 
-### 5. Camera
-POST http://localhost:3500/api/products
+###
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "DSLR Pro X500",
-  "description": "Professional-grade DSLR camera.",
-  "price": 899.99,
-  "category": "Camera",
+  "name": "iMac M1 2021 24 inch",
+  "shopId": "1",
+  "description": "iMac 24 inch (2021) Thay đổi ngoạn mục với chip Apple M1, iMac nay mỏng ấn tượng và mạnh không thể tưởng. Được tạo tác để nổi bật trong mọi môi trường và phù hợp hoàn toàn với cuộc sống của bạn.",
+  "price": 31290000,
+  "category": "Computer",
   "attribute": {
-    "brand": "PhotoMaster",
-    "description": "High-resolution imaging.",
-    "isActive": true,
-    "resolution": "32MP",
-    "lensType": ["18-55mm"],
-    "sensorType": "APS-C",
-    "videoResolution": ["4K"]
+    "brand": "Apple",
+    "processor": "Apple M1",
+    "ram": ["8GB"],
+    "storageType": "SSD",
+    "operatingSystem": ["Windows 11"]
   },
-  "images": ["https://loremflickr.com/640/480/camera"],
-  "thumbnailImage": "https://loremflickr.com/200/200/camera",
+  "images": ["https://down-vn.img.susercontent.com/file/07dee9b786365364e6d157e72f06f2ba.webp", "https://down-vn.img.susercontent.com/file/64f4d61706b3323c33c8b493cc8cfe41.webp", "https://down-vn.img.susercontent.com/file/333104ef60018f392db65451e3ac48f0.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/sg-11134201-23020-vpxfrqf69cnvbd.webp",
   "ratings": {
-    "average": 4.9,
-    "count": 75
+    "average": 5,
+    "count": 1
   },
   "isActive": true,
-  "tags": ["photography", "camera"]
+  "tags": ["apple", "imac"]
+}
+### 5. Camera
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name": "Máy ảnh kỹ thuật số Fujifilm X-T5",
+  "shopId": "1",
+  "description": "Fujifilm X-T5 - Mang đến chất lượng hình ảnh tuyệt đỉnh trong một thân máy ảnh cổ điển vượt thời gian.",
+  "price": 53490000,
+  "category": "Camera",
+  "attribute": {
+    "brand": "Fujifilm",
+    "resolution": "40MP",
+    "lensType": ["16-80mm"],
+    "sensorType": "X-Trans CMOS 5 HR 40.2 MP",
+    "videoResolution": ["6.2K"]
+  },
+  "images": ["https://down-vn.img.susercontent.com/file/sg-11134201-22110-njlq4t3j9djva6.webp, https://down-vn.img.susercontent.com/file/sg-11134201-22110-rrnt2q3j9djva1.webp", "https://down-vn.img.susercontent.com/file/sg-11134201-22110-afrb853j9djv0f.webp", "https://down-vn.img.susercontent.com/file/sg-11134201-22110-d3v6983j9djv4f.webp", "https://down-vn.img.susercontent.com/file/sg-11134201-22110-pfq8163j9djv29.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/sg-11134201-22110-kl04c03j9djvf7.webp",
+  "ratings": {
+    "average": 4.9,
+    "count": 20
+  },
+  "isActive": true,
+  "tags": ["mayanh", "fujifirm"]
 }
 
 ### 6. Watch
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "Smart Fitness Watch",
-  "description": "Water-resistant smartwatch with fitness tracking.",
-  "price": 149.99,
+  "name": "Đồng Hồ Casio F94",
+  "shopId": "1",
+  "description": "Đồng hồ Casio F94 phiên bản huyền thoại chính hãng,đồng hồ điện tử dây nhựa dẻo bền bỉ chống nước chống xước có BH P2T",
+  "price": 74000,
   "category": "Watch",
   "attribute": {
-    "brand": "FitTime",
-    "description": "Monitor your daily activities.",
+    "brand": "Casio",
     "isActive": true,
-    "watchType": "Smartwatch",
+    "watchType": "Đồng hồ điện tử",
     "strapMaterial": "Silicone",
-    "waterResistance": "50m",
-    "features": ["Heart Rate Monitor", "Step Counter"]
+    "waterResistance": "3ATM",
+    "features": ["chống nước", "chống xước"]
   },
-  "images": ["https://loremflickr.com/640/480/watch"],
-  "thumbnailImage": "https://loremflickr.com/200/200/watch",
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsty6p0o9m6xb5.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsty6p0ouople1.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsty6p0o87mh3e.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsty6p0ow3a15e.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsty6p0ob0rdee.webp",
   "ratings": {
-    "average": 4.4,
-    "count": 200
+    "average": 4.7,
+    "count": 1500
   },
   "isActive": true,
-  "tags": ["fitness", "smartwatch"]
+  "tags": ["casio", "dongho"]
+}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name": "Đồng hồ Apple Watch Series 10",
+  "shopId": "1",
+  "description": "Bộ sản phẩm bao gồm: Đồng hồ, Dây đeo, Cáp sạc nhanh từ tính USB_C",
+  "price": 10799000,
+  "category": "Watch",
+  "attribute": {
+    "brand": "Casio",
+    "isActive": true,
+    "watchType": "Đồng hồ thông minh",
+    "strapMaterial": "Silicone",
+    "waterResistance": "5ATM",
+    "features": ["chống nước", "màn hình cảm ứng"]
+  },
+  "images": ["https://down-vn.img.susercontent.com/file/sg-11134301-7rdxc-m08kdbqaza6h37.webp", "https://down-vn.img.susercontent.com/file/sg-11134301-7rdy3-m08kdem2q1b538.webp", "https://down-vn.img.susercontent.com/file/sg-11134301-7rdyr-m08kdfy2t6l19d.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/sg-11134301-7rdwp-m08kd7ywg1d288.webp",
+  "ratings": {
+    "average": 5,
+    "count": 50
+  },
+  "isActive": true,
+  "tags": ["apple", "dongho", "donghothongminh"]
 }
 
 ### 7. Beauty
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
-  "name": "Hydrating Face Cream",
-  "description": "Daily moisturizer for all skin types.",
-  "price": 29.99,
+  "name": "Lược Chải Tóc Thoáng Khí Massage Da Đầu Tạo Kiểu Tóc Xoăn Dài Đặc Biệt",
+  "shopId": "1",
+  "description": "Lược Chải Tóc Đệm Khí Mát Xa Da Đầu Tạo Kiểu Tóc Xoăn Dài Đặc Biệt Cho Nữ Tiện Lợi",
+  "price": 8499,
   "category": "Beauty",
   "attribute": {
-    "brand": "GlowEssentials",
-    "description": "Deep hydration formula.",
-    "isActive": true,
-    "type": "Moisturizer",
-    "shade": [],
-    "skinType": ["Dry", "Normal"],
+    "brand": "Hà Đông",
+    "type": "Lược",
+    "shade": ["Xanh lá", "Hồng"],
+    "skinType": [],
     "expirationDate": "2026-06-01"
   },
-  "images": ["https://loremflickr.com/640/480/beauty"],
-  "thumbnailImage": "https://loremflickr.com/200/200/beauty",
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m3jlmlww0so19b.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m3jlmlya065d15.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m3jlmlya1kpt40.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m3jlnb3x5grla0.webp",
   "ratings": {
     "average": 4.3,
     "count": 90
   },
   "isActive": true,
-  "tags": ["skincare", "beauty"]
+  "tags": ["chamsoctoc", "sacdep"]
+}
+
+###
+POST {{url}}
+Content-Type: application/json
+
+{
+  "name": "Lông Mi Giả Lookme Star",
+  "shopId": "1",
+  "description": "Mi Cong C không gây kích ứng, Lông mi có thể tái sử dụng có thể được sử dụng nhiều lần nếu sử dụng và bảo quản đúng cách.",
+  "price": 29000,
+  "category": "Beauty",
+  "attribute": {
+    "brand": "Lookme Star",
+    "type": "Mi giả",
+    "shade": ["Light Star", "Tai thỏ"],
+    "skinType": [],
+    "expirationDate": "2028-06-01"
+  },
+  "images": ["https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m6gf01k2dwmfb2.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m6gf1238xbc1fb.webp", "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m6gf0z7r4qxze2.webp"],
+  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m9le3r2omr6id5.webp",
+  "ratings": {
+    "average": 4.9,
+    "count": 1400
+  },
+  "isActive": true,
+  "tags": ["migia", "mat"]
 }
 
 ### 8. Health
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -212,7 +349,6 @@ Content-Type: application/json
   "category": "Health",
   "attribute": {
     "brand": "HealthPlus",
-    "description": "Supports immunity.",
     "isActive": true,
     "category": "Vitamin",
     "dosage": "1 tablet daily",
@@ -230,7 +366,7 @@ Content-Type: application/json
 }
 
 ### 9. Grocery
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -240,7 +376,6 @@ Content-Type: application/json
   "category": "Grocery",
   "attribute": {
     "brand": "NatureFresh",
-    "description": "Unsalted and roasted.",
     "isActive": true,
     "category": "Snacks",
     "weight": "250g",
@@ -258,7 +393,7 @@ Content-Type: application/json
 }
 
 ### 10. Toy
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -268,7 +403,6 @@ Content-Type: application/json
   "category": "Toy",
   "attribute": {
     "brand": "PlayFun",
-    "description": "Encourages creativity.",
     "isActive": true,
     "ageRange": "3-6 years",
     "material": "Plastic",
@@ -286,7 +420,7 @@ Content-Type: application/json
 }
 
 ### 11. MenShoes
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -296,7 +430,6 @@ Content-Type: application/json
   "category": "MenShoes",
   "attribute": {
     "brand": "StepUp",
-    "description": "Durable leather shoes.",
     "isActive": true,
     "material": "Leather",
     "size": ["9", "10", "11"],
@@ -315,7 +448,7 @@ Content-Type: application/json
 
 
 ### 12. WomenShoes
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -325,7 +458,6 @@ Content-Type: application/json
   "category": "WomenShoes",
   "attribute": {
     "brand": "ChicFeet",
-    "description": "Comfortable suede heels.",
     "isActive": true,
     "material": "Suede",
     "size": ["6", "7", "8"],
@@ -343,7 +475,7 @@ Content-Type: application/json
 }
 
 ### 13. WomenBags
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -353,7 +485,6 @@ Content-Type: application/json
   "category": "WomenBags",
   "attribute": {
     "brand": "BagLady",
-    "description": "Premium leather bag.",
     "isActive": true,
     "material": "Leather",
     "size": "Medium",
@@ -371,7 +502,7 @@ Content-Type: application/json
 }
 
 ### 14. FashionAccessories
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -381,7 +512,6 @@ Content-Type: application/json
   "category": "FashionAccessories",
   "attribute": {
     "brand": "JewelTrend",
-    "description": "18K gold plated.",
     "isActive": true,
     "material": "Gold",
     "accessoryType": "Necklace",
@@ -399,7 +529,7 @@ Content-Type: application/json
 }
 
 ### 15. BooksStationery
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -409,7 +539,6 @@ Content-Type: application/json
   "category": "BooksStationery",
   "attribute": {
     "brand": "LitPress",
-    "description": "Hardcover edition.",
     "isActive": true,
     "category": "Book",
     "genre": "Mystery",
@@ -426,7 +555,7 @@ Content-Type: application/json
 }
 
 ### 16. MenBags
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -436,7 +565,6 @@ Content-Type: application/json
   "category": "MenBags",
   "attribute": {
     "brand": "GearMan",
-    "description": "Water-resistant material.",
     "isActive": true,
     "material": "Nylon",
     "size": "Large",
@@ -454,7 +582,7 @@ Content-Type: application/json
 }
 
 ### 17. Pet
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -464,7 +592,6 @@ Content-Type: application/json
   "category": "Pet",
   "attribute": {
     "brand": "PetJoy",
-    "description": "Safe for chewing.",
     "isActive": true,
     "petType": "Dog",
     "productType": "Toy",
@@ -482,7 +609,7 @@ Content-Type: application/json
 }
 
 ### 18. ToolsHomeImprovement
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -492,7 +619,6 @@ Content-Type: application/json
   "category": "ToolsHomeImprovement",
   "attribute": {
     "brand": "ToolTech",
-    "description": "Rechargeable battery.",
     "isActive": true,
     "toolType": "Drill",
     "material": "Steel",
@@ -510,7 +636,7 @@ Content-Type: application/json
 }
 
 ### 19. MomsKidsBabies
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -520,7 +646,6 @@ Content-Type: application/json
   "category": "MomsKidsBabies",
   "attribute": {
     "brand": "BabySoft",
-    "description": "Gentle on skin.",
     "isActive": true,
     "productType": "Diapers",
     "ageRange": "0-6 months",
@@ -538,7 +663,7 @@ Content-Type: application/json
 }
 
 ### 20. HomeLiving
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -548,7 +673,6 @@ Content-Type: application/json
   "category": "HomeLiving",
   "attribute": {
     "brand": "HomeStyle",
-    "description": "Handcrafted design.",
     "isActive": true,
     "productType": "Decor",
     "material": "Ceramic",
@@ -567,7 +691,7 @@ Content-Type: application/json
 
 
 ### 21. SportOutdoor
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -577,7 +701,6 @@ Content-Type: application/json
   "category": "SportOutdoor",
   "attribute": {
     "brand": "OutdoorPeak",
-    "description": "Easy to assemble.",
     "isActive": true,
     "activityType": "Camping",
     "material": "Nylon",
@@ -595,7 +718,7 @@ Content-Type: application/json
 }
 
 ### 22. KidFashion
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -605,7 +728,6 @@ Content-Type: application/json
   "category": "KidFashion",
   "attribute": {
     "brand": "KidTrend",
-    "description": "Durable fabric.",
     "isActive": true,
     "material": "Cotton",
     "size": ["S", "M"],
@@ -623,7 +745,7 @@ Content-Type: application/json
 }
 
 ### 23. HomeCare
-POST http://localhost:3500/api/products
+POST {{url}}
 Content-Type: application/json
 
 {
@@ -633,7 +755,6 @@ Content-Type: application/json
   "category": "HomeCare",
   "attribute": {
     "brand": "CleanHome",
-    "description": "Effective stain removal.",
     "isActive": true,
     "productType": "Detergent",
     "volume": "1L",

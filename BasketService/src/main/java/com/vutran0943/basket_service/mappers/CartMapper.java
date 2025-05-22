@@ -7,4 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface CartMapper {
     public CartResponse toCartResponse(Cart cart);
+    public Cart toCart(CartResponse cartResponse);
 }

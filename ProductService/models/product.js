@@ -101,6 +101,10 @@ const productSchema = new Schema(
             minlength: [3, "Product name must be at least 3 characters"],
             maxlength: [100, "Product name cannot exceed 100 characters"],
         },
+        shopId: {
+            type: String,
+            required: [true, "ShopId is required"],
+        },
         description: {
             type: String,
             required: [true, "Product description is required"],
@@ -255,8 +259,7 @@ productSchema.pre("findOneAndUpdate", async function (next) {
     next();
 });
 
-// Indexes for improved query performance
-productSchema.index({ name: "text", description: "text" });
+productSchema.index({ name: "text", tags: "text" });
 productSchema.index({ category: 1 });
 
 // Export the Product model as a singleton
