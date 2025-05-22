@@ -20,7 +20,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # cần để git diff so sánh với origin/main
+          ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Fetch main
+        run: git fetch origin main
+        
       - id: product
         run: |
           if git diff --name-only origin/main...HEAD | grep -q '^ProductService/'; then
