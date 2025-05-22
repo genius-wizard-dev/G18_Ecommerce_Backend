@@ -7,14 +7,6 @@ const ProductAttributeTypeSchema = new Schema({
         trim: true,
         default: "No Brand",
     },
-    description: {
-        type: String,
-        trim: true,
-    },
-    isActive: {
-        type: Boolean,
-        default: true,
-    },
 });
 
 // Factory Pattern
