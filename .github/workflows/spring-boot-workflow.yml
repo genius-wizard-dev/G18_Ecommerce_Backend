@@ -27,7 +27,7 @@ jobs:
 
       - id: profile
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^ProfileService/'; then
+          if git diff --name-only origin/main..HEAD | grep -q '^ProfileService/'; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -35,7 +35,7 @@ jobs:
 
       - id: identify
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^IdentifyService/'; then
+          if git diff --name-only origin/main..HEAD | grep -q '^IdentifyService/'; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -43,7 +43,7 @@ jobs:
 
       - id: order
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^OrderService/'; then
+          if git diff --name-only origin/main..HEAD | grep -q '^OrderService/'; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -51,7 +51,7 @@ jobs:
 
       - id: payment
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^PaymentService/'; then
+          if git diff --name-only origin/main..HEAD | grep -q '^PaymentService/'; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
 
       - id: basket
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^BasketService/'; then
+          if git diff --name-only origin/main..HEAD | grep -q '^BasketService/'; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
