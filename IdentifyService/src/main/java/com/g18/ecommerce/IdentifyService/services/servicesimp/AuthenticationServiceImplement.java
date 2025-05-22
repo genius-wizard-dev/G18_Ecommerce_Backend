@@ -84,7 +84,6 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     }
 
     @Override
-    @Retry(name = "default", fallbackMethod = "introspectFallback")
     public IntrospectResponse introspect(IntrospectRequest req) {
         try {
             verifyToken(req.getToken(), false);
@@ -94,10 +93,6 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         return IntrospectResponse.builder().valid(true).build();
     }
 
-    public IntrospectResponse introspectFallback(IntrospectRequest req, Throwable ex) {
-        log.error("Fallback introspect: {}", ex.getMessage());
-        return IntrospectResponse.builder().valid(false).build();
-    }
 
     @Override
     @Retry(name = "default", fallbackMethod = "logoutFallback")
