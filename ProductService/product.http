@@ -1,5 +1,5 @@
 @url = http://localhost:3500/api/products
-@token = Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHMTggRWNvbW1lcmNlIiwic3ViIjoiSm9objEyMyIsImV4cCI6MTc0Nzg4NzQ0MSwiaWF0IjoxNzQ3ODgzODQxLCJqdGkiOiJiY2Q0NmVkNy0zYTE0LTQ2ZWYtOTJmNC1jNWJkODIzOTEyMWUiLCJzY29wZSI6IlJPTEVfVVNFUiAwMDAwIn0.PteJiJga7KZkyLFDSBDRIPUFFGOdwKtVyPZO0WvH7kQkPpcnNb0mIIcztZoVITF6o8Dlqv8P0DUIA0zQul4FWQ
+@token = Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHMTggRWNvbW1lcmNlIiwic3ViIjoidmllcXVlIiwiZXhwIjoxNzQ3OTEyNjg1LCJpYXQiOjE3NDc5MDkwODUsImp0aSI6ImUwNmJmNjBkLTJjODUtNDMyYi04ZTljLTY5NWE5NjViNDEzMSIsInNjb3BlIjoiUk9MRV9VU0VSIDAwMDAifQ.8dcCu3XQI69Ws9sTi6oLMOU0_904ZuwlV1GuHWe7fTUWZrm5jXYV0LmxCjAgQoreZlgO19IiAJPN3jKItD7ndA
 
 GET {{url}}?search=%C3%A1
 Authorization: {{token}}
@@ -9,7 +9,7 @@ GET {{url}}/6829a1ecd0200ef461827996
 Authorization: {{token}}
 
 ###
-DELETE {{url}}/6829a1ecd0200ef461827996
+DELETE {{url}}/682c9e9366f4f38be94064ba
 Content-Type: application/json
 Authorization: {{token}}
 
@@ -18,60 +18,42 @@ Authorization: {{token}}
 }
 
 ### 
-PUT {{url}}/6829a1ecd0200ef461827996
+PUT {{url}}/682c1ca659a560ed176c2575
 Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "name": "Điện thoại OPPO Reno13 5G",
-  "shopId": "029bb9a2-7f2d-4abf-b3f8-af7c75e23215",
-  "description": "Điện thoại OPPO Reno13 5G (Bảo Hành 3 Tháng 1 Đổi 1) - Phụ Kiện Điện Thoại Rio.",
-  "price": 799000,
-  "category": "Mobile",
+  "name": "Mũ trẻ em",
+  "shopId": "78ae67b6-da49-4722-99ba-43dbb67946a8",
+  "description": "Chiếc mũ bảo hộ hình ếch siêu dễ thương dành cho các bé yêu! 🐸\n\nThiết kế ngộ nghĩnh với hình mặt ếch đáng yêu, cùng với kính chắn trong suốt, bảo vệ bé khỏi khói bụi, giọt bắn và ánh nắng mặt trời.\n\nMũ có nhiều màu sắc tươi sáng để lựa chọn, phù hợp với sở thích của từng bé.\n\nVừa bảo vệ an toàn, vừa làm điệu cho bé yêu, còn chần chừ gì mà không sắm ngay! 🤩",
+  "price": 25000,
+  "category": "BooksStationery",
   "attribute": {
-    "brand": "Oppo",
-    "screenSize": "6.7 inches",
-    "ram": [
-      "8GB"
-    ],
-    "storage": [
-      "128GB",
-      "256GB"
-    ],
-    "operatingSystem": "Android",
-    "battery": "4500mAh",
-    "camera": {
-      "rear": [
-        "48MP",
-        "12MP"
-      ],
-      "front": [
-        "20MP"
-      ]
-    },
-    "color": [
-      "Black",
-      "Silver"
-    ]
+    "brand": "Thiên Long",
+    "category": "Sách",
+    "genre": "Sách",
+    "author": "John Doe"
   },
   "images": [
-    "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m7vnz8w1sz771a.webp"
+    "g18_ecommerce/ya6bnyz72hzw2yn85plc",
+    "g18_ecommerce/u8hwntlas62hpgmqbgpi",
+    "g18_ecommerce/xbhjfro1vh83jc3qcrgh"
   ],
-  "thumbnailImage": "https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m7vnz8w1rkcm76.webp",
+  "thumbnailImage": "g18_ecommerce/trrhsuur40llohalxxjo",
   "ratings": {
-    "average": 4.8,
-    "count": 300
+    "average": 0,
+    "count": 0
   },
-  "isActive": true,
+  "isActive": false,
   "tags": [
-    "tech",
-    "smartphone"
+    "sach",
+    "hocsinh"
   ],
   "createdAt": {
-    "$date": "2025-05-18T09:01:32.405Z"
+    "$date": "2025-05-20T06:09:42.503Z"
   },
   "updatedAt": {
-    "$date": "2025-05-18T09:01:32.405Z"
+    "$date": "2025-05-20T15:30:49.174Z"
   },
   "__v": 0
 }
