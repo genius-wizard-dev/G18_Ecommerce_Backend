@@ -43,26 +43,24 @@ public class AuthenticationServiceImplement implements AuthenticationService {
     UserRepository userRepository;
     InvalidatedRepository invalidatedRepository;
     PasswordEncoder passwordEncoder;
+
     @Value("${jwt.signerKey}")
     @NonFinal
     protected String SIGNER_KEY;
 
-
     @NonFinal
     @Value("${jwt.valid-duration}")
     protected long DURATION_TIME;
-
 
     @NonFinal
     @Value("${jwt.refreshable-duration}")
     protected long REFRESHABLE_DURATION;
 
     OtpService otpService;
-
     EmailService emailService;
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "authenticateFallback")
     public AuthenticationResponse authenticate(AuthenticationRequest req) {
         var user = userRepository.findByUsername(req.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -77,21 +75,32 @@ public class AuthenticationServiceImplement implements AuthenticationService {
                 .build();
     }
 
-    @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
-    public IntrospectResponse introspect(IntrospectRequest req) {
-        var token = req.getToken();
-        boolean isValid = true;
-        try {
-            verifyToken(token, false);
-        } catch (AppException | JOSEException | ParseException e) {
-            throw new AppException(ErrorCode.INVALID_TOKEN);
-        }
-        return IntrospectResponse.builder().valid(isValid).build();
+    public AuthenticationResponse authenticateFallback(AuthenticationRequest req, Throwable ex) {
+        log.error("Fallback authenticate: {}", ex.getMessage());
+        return AuthenticationResponse.builder()
+                .token("fallback-token")
+                .expiryTime(new Date(System.currentTimeMillis() + 60000))
+                .build();
     }
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "introspectFallback")
+    public IntrospectResponse introspect(IntrospectRequest req) {
+        try {
+            verifyToken(req.getToken(), false);
+        } catch (AppException | JOSEException | ParseException e) {
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        }
+        return IntrospectResponse.builder().valid(true).build();
+    }
+
+    public IntrospectResponse introspectFallback(IntrospectRequest req, Throwable ex) {
+        log.error("Fallback introspect: {}", ex.getMessage());
+        return IntrospectResponse.builder().valid(false).build();
+    }
+
+    @Override
+    @Retry(name = "default", fallbackMethod = "logoutFallback")
     public void logout(LogoutRequest req) {
         try {
             var signToken = verifyToken(req.getToken(), true);
@@ -107,8 +116,12 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         }
     }
 
+    public void logoutFallback(LogoutRequest req, Throwable ex) {
+        log.error("Fallback logout: {}", ex.getMessage());
+    }
+
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "refreshTokenFallback")
     public AuthenticationResponse refreshToken(RefreshRequest req) {
         try {
             var signedJWT = verifyToken(req.getToken(), true);
@@ -132,37 +145,50 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         }
     }
 
-    @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
-    public boolean changePassword(String userId, ChangePasswordRequest req) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        if (!otpService.verifyOtp(userId, req.getOtp())) {
-            throw new AppException(ErrorCode.INVALID_OTP);
-        }
-
-        if (!passwordEncoder.matches(req.getOldPassword(), user.getPassword())) {
-            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
-        }
-
-        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
-        userRepository.save(user);
-        otpService.deleteOtp(userId);
-
-        return true;
+    public AuthenticationResponse refreshTokenFallback(RefreshRequest req, Throwable ex) {
+        log.error("Fallback refreshToken: {}", ex.getMessage());
+        return AuthenticationResponse.builder()
+                .token("fallback-refresh-token")
+                .expiryTime(new Date(System.currentTimeMillis() + 60000))
+                .build();
     }
 
     @Override
-    @Retry(name = "default", fallbackMethod = "fallbackMethod")
+    @Retry(name = "default", fallbackMethod = "changePasswordFallback")
+    public boolean changePassword(String userId, ChangePasswordRequest req) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!otpService.verifyOtp(userId, req.getOtp())) {
+            throw new AppException(ErrorCode.INVALID_OTP);
+        }
+        if (!passwordEncoder.matches(req.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(user);
+        otpService.deleteOtp(userId);
+        return true;
+    }
+
+    public boolean changePasswordFallback(String userId, ChangePasswordRequest req, Throwable ex) {
+        log.error("Fallback changePassword: {}", ex.getMessage());
+        return false;
+    }
+
+    @Override
+    @Retry(name = "default", fallbackMethod = "sendOtpFallback")
     public String sendOtp(String userId, OtpRequest req) throws MessagingException {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         String otp = String.valueOf(new Random().nextInt(900000) + 100000);
         otpService.saveOtp(userId, otp);
         emailService.send(req.getEmail(), buildOtpHtmlContent(otp));
         return "Mã OTP đã được gửi đến email của bạn";
+    }
+
+    public String sendOtpFallback(String userId, OtpRequest req, Throwable ex) {
+        log.error("Fallback sendOtp: {}", ex.getMessage());
+        return "Không thể gửi mã OTP lúc này, vui lòng thử lại sau.";
     }
 
     private String buildOtpHtmlContent(String otp) {
@@ -182,14 +208,11 @@ public class AuthenticationServiceImplement implements AuthenticationService {
 
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
-
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
                 .issuer("G18 Ecommerce")
                 .issueTime(new Date())
-                .expirationTime(
-                        new Date(Instant.now().plus(DURATION_TIME, ChronoUnit.SECONDS).toEpochMilli())
-                )
+                .expirationTime(new Date(Instant.now().plus(DURATION_TIME, ChronoUnit.SECONDS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
@@ -207,11 +230,11 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = (isRefresh)
-                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant()
-                .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
-        var verified = signedJWT.verify(verifier);
-        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+        boolean verified = signedJWT.verify(verifier);
+        if (!(verified && expiryTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         if (invalidatedRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         return signedJWT;
@@ -231,45 +254,4 @@ public class AuthenticationServiceImplement implements AuthenticationService {
         }
         return stringJoiner.toString();
     }
-
-    // Fallback cho authenticate
-    public AuthenticationResponse fallbackMethod(AuthenticationRequest req, Throwable ex) {
-        return AuthenticationResponse.builder()
-                .token("fallback-token")
-                .expiryTime(new Date(System.currentTimeMillis() + 60000)) // Token tạm
-                .build();
-    }
-
-    // Fallback cho introspect
-    public IntrospectResponse fallbackMethod(IntrospectRequest req, Throwable ex) {
-        return IntrospectResponse.builder()
-                .valid(false)
-                .build();
-    }
-
-    // Fallback cho logout (void)
-    public void fallbackMethod(LogoutRequest req, Throwable ex) {
-        log.error("Fallback logout: {}", ex.getMessage());
-    }
-
-    // Fallback cho refreshToken
-    public AuthenticationResponse fallbackMethod(RefreshRequest req, Throwable ex) {
-        return AuthenticationResponse.builder()
-                .token("fallback-refresh-token")
-                .expiryTime(new Date(System.currentTimeMillis() + 60000))
-                .build();
-    }
-
-    // Fallback cho changePassword
-    public boolean fallbackMethod(String userId, ChangePasswordRequest req, Throwable ex) {
-        log.error("Fallback changePassword: {}", ex.getMessage());
-        return false;
-    }
-
-    // Fallback cho sendOtp
-    public String fallbackMethod(String userId, OtpRequest req, Throwable ex) {
-        log.error("Fallback sendOtp: {}", ex.getMessage());
-        return "Không thể gửi mã OTP lúc này, vui lòng thử lại sau.";
-    }
-
 }
