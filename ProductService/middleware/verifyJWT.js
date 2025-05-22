@@ -16,8 +16,6 @@ const verifyJWT = (req, res, next) => {
         const [role, _] = decoded.scope.split(" ");
 
         req.roles = [role];
-
-        // req.permissions = permission;
         next();
     });
 };
