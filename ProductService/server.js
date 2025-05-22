@@ -38,7 +38,7 @@ app.use(helmet());
 //middleware for cookies
 app.use(cookieParser());
 
-app.use(verifyJWT);
+// app.use(verifyJWT);
 
 // routes
 // app.use("/", require("./routes/root"));
