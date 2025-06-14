@@ -25,8 +25,8 @@ spring:
       sasl.mechanism: SCRAM-SHA-512
       sasl.jaas.config: >
         org.apache.kafka.common.security.scram.ScramLoginModule required
-        username="g18ecommerce"
-        password="Hum3XtGsrjBdhXTDUZnmgZbqbrIBdO";
+        username="vutran0943"
+        password="R629O5DZ2FX4zflMnOdHAU8jNnCtpZ";
     consumer:
       group-id: profile-group
       auto-offset-reset: earliest
